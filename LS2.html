@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en_US" class="no-js">
+	<head>
+	  	<meta charset="utf-8">
+
+	  	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	  	<title>LS2 PAC</title>
+
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+
+        <link rel="apple-touch-icon-precomposed" href="images/mobileIcons/icon_57.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/mobileIcons/icon_72.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/mobileIcons/icon_114.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/mobileIcons/icon_144.png" />
+
+		<link rel="shortcut icon" href="/PAC.ico?_=c6e5b851">
+
+		<script type="text/javascript">
+			var trackingCode = 'UA-21568178-5';
+			var isTlcGoogleAnalyticsEnabled = false;
+			var libraryType = 'Public';
+			var config = 'pacdefault';
+			var tlcGoogleAnalyticsPrivacyURL = 'http://www.tlcdelivers.com/tlc/privacy/communityanalyticsforborrowers.asp';
+			var svnRevision = 'c6e5b851';
+			var currentVersion = '5.6.5';
+            var hasAuthorizedEResources = false;
+			var SPRING_SECURITY_LAST_EXCEPTION_MESSAGE = '';
+			var SPRING_SECURITY_LAST_EXCEPTION_CAUSE = '';
+		</script>
+
+	  	
+	  		
+			    <script src="js/app-compiled.js?_=c6e5b851"></script>
+	  		
+		    
+	    
+		<link rel="stylesheet" href="css/pac.css?_=c6e5b851" />
+
+        <!--[if IE]>
+            <link rel="stylesheet" href="css/ie.css?_=c6e5b851" />
+        <![endif]-->
+		<!--[if IE 7]>
+			<link rel="stylesheet" href="css/ie7.css?_=c6e5b851" />
+		<![endif]-->
+
+		<script>window.isIE8 = false;</script>
+        <!--[if IE 8]>
+			<script>window.isIE8 = true;</script>
+        <![endif]-->
+
+        <!--[if lt IE 9]>
+            <link rel="stylesheet" href="css/IELessThan9.css?_=c6e5b851" />
+
+            <script src="js/polyfils/respond.js"></script>
+        <![endif]-->
+
+
+        <link rel="stylesheet" href="/getOverrideCss" />
+	</head>
+	<body>
+		<div id="mainPage"></div>
+		<div id="mainLoader">
+			<div id="progressbarWrapper" style="height:25px;" class="ui-widget-default">
+				<div id="loadingProgress"></div>
+			</div>
+		</div>
+		<div id="successMessage" class="successMessage" style="display: none;"><div class="content"></div><a href="javascript:;" class="closeSuccess">&times;</a></div>
+		<div id="tooltip" style="display:none;"><div class="content"></div></div>
+		
+
+
+
+
+
+
+
+
+
+
+<div id="loginForm">
+	<form action="blank" class="loginForm lightBorder" method="POST" target="hiddenLoginIFrame">
+		<div id="loginErrorMessage" class="errorGradient" style="display: none;">
+			The credentials entered are incorrect.
+		</div>
+
+		<div id="googleSignInBtnDiv" style="display: none">
+			<div>
+				<button type="button" class="googleSignInBtn" onclick="location.href='/oauth2/callback'" aria-label="Sign in with Google">
+				</button>
+			</div>
+
+			<div id="googleSignInSeparator">
+				<h2><span>or</span></h2>
+			</div>
+		</div>
+
+		
+			
+				<h3>Log in with either your Library Card Number or EZ Login</h3>
+			
+		
+
+		
+			
+		
+
+		<div id="accountNotLinkedErrorMessage" style="display: none;">
+			<span id="googleAccountEmail"></span>
+			<input type="hidden" name="linkGoogleAccount" id="linkGoogleAccount" value="false" />
+		</div>
+
+		<div class="innerLoginForm">
+			
+				
+					<label class="textboxLabel" for="barcode">Library Card Number or EZ Username</label>
+					<input class="textbox lightBorder" autocapitalize="off" autocorrect="off" type="text" name="barcode" id="barcode" />
+
+					
+						
+							
+								<label class="textboxLabel" for="pin">PIN or EZ Password</label>
+								<input class="textbox lightBorder" type="password" name="pin" id="pin" />
+							
+							
+						
+					
+				
+
+				
+			
+		</div>
+
+		<div class="forgotAndRememberContainer clearfix">
+			
+				<span class="rememberMeContainer clearfix">
+					<input type="checkbox" name="rememberMe" id="rememberMe" />
+					<label class="clickableFormText" for="rememberMe">Remember Me</label>
+				</span>
+			
+		</div>
+
+		<div class="loginSubmitButton">
+			
+				
+
+				
+					<input class="darkButton" type="submit" value="Log In" id="submitLoginFormButton"/>
+					<input class="lightButton" type="button" value="Cancel" id="loginCloseButton" />
+				
+			
+		</div>
+
+
+	</form>
+	
+		
+			<div id="loginFormForgotPassword" class="forgotPasswordContainer clearfix"></div>
+		
+	
+</div>
+
+<iframe id="hiddenLoginIFrame" title="Hidden login iframe" name="hiddenLoginIFrame" src="/tmpl/mainFooter.html" tabindex="-1"></iframe>
+
+
+<script type="text/javascript">
+	var supportsPlaceHolders = (function () {
+		var i = document.createElement("input");
+		return typeof i.placeholder !== 'undefined';
+	}());
+
+	if(supportsPlaceHolders == false) {
+//		alert("here")
+		$(".fallBackPlaceholder" ).show();
+	}
+</script>
+
+	</body>
+</html>
