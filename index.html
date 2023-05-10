@@ -69,7 +69,13 @@
       <br>
       <h3><a href="faq.html">faq</a></h3>
       <br>
-      <h3><a href="help.html">help</a></h3>
+      <h3><a href="help.html"onmouseover="playSound2()">help</a></h3>
+      <audio id="audio3" src="./sounds/shutup2.mp3"></audio>
+        <script>
+        function playSound2() {
+        var audio = document.getElementById("audio3");
+         audio.play();
+       }
       <br>
     </div>
   </body>
