@@ -1,37 +1,60 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>conshaunery.com/help</title>
-    <style>
-      body {
-        background-color: black;
-        color: white;
-        font-family: Helvetica, Arial, sans-serif;
-        font-size: 16px;
-      }
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 40px 20px;
-      }
-      h1, h2, h3 {
-        color: white;
-        font-weight: bold;
-        text-align: center;
-      }
-      p {
-        line-height: 1.5;
-        text-align: center;
-      }
-      a {
-        color: orange;
-        text-decoration: none;
-      }
-      a:hover {
-        color: white;
-      }
-    </style>
-  </head>
+<head>
+  <title>conshaunery.com/help</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 16px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    h1, h2, h3 {
+      color: white;
+      font-weight: bold;
+      text-align: center;
+    }
+    p {
+      line-height: 1.5;
+      text-align: center;
+    }
+    a {
+      color: orange;
+      text-decoration: none;
+    }
+    a:hover {
+      color: white;
+    }
+    .gif {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to conshaunery.com</h1>
+    <p>This is the help page.</p>
+    <!-- GIF -->
+    <img class="gif" src="pictures/phonering.gif" alt="Click me" onclick="playAudio()">
+    <!-- Audio -->
+    <audio id="myAudio">
+      <source src="sounds/music/callhold.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+
+  <script>
+    // Function to play audio
+    function playAudio() {
+      var audio = document.getElementById("myAudio");
+      audio.play();
+    }
+  </script>
   <body>
     <div class="container">
       <h1 style="font-size: xxx-large;">[CS]</h1>
