@@ -44,7 +44,14 @@
       <br>
       <h3><a href="weather.html">weather</a></h3>
       <br>
-      <h3><a href="pics.html">pics</a></h3>
+      <h3><a href="pics.html" onmouseover="playSound8()">pics</a></h3>
+      <audio id="audio1" src="./sounds/rainbowsix6.m4a"></audio>
+      <script>
+        function playSound8() {
+          var audio = document.getElementById("audio1");
+          audio.play();
+        }
+      </script>
       <br>
       <h3><a href="vids.html" onmouseover="playSound1()">vids</a></h3>
       <audio id="audio1" src="./sounds/toons.mp3"></audio>
@@ -80,7 +87,7 @@
       <h3><a href="stream.html"onmouseover="playSound6()">stream</a></h3>
       <audio id="audio5" src="./sounds/navi_hello.mp3"></audio>
       <script>
-        function playSound5() {
+        function playSound6() {
           var audio = document.getElementById("audio5");
           audio.play();
         }
@@ -105,9 +112,9 @@
         }
       </script>
       <br><h6><a href="leave.html" onmouseover="playSound7()">leave</a></h6>
-      <audio id="audio5" src="./sounds/scream17.wav"></audio>
+      <audio id="audio5" src="./sounds/IntroWorld_38.wav"></audio>
       <script>
-        function playSound5() {
+        function playSound7() {
           var audio = document.getElementById("audio5");
           audio.play();
         }
