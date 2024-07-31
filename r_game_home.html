@@ -48,7 +48,15 @@
       <img src=".\pictures\Conshaunio.gif" alt="game" width="700" height="300" align="center"></p>
       <br>
       <br>
-      <img src=".\pictures\Start.png" alt="game" width="100" height="100" align="center"></p>
+      <img src="./pictures/Start.png" alt="game" width="100" height="100" style="display: block; margin: 0 auto;">
+    <a href="pics.html" onmouseover="playSound1()"></a>
+    <audio id="audio8" src="./sounds/start.mp3"></audio>
+    <script>
+        function playSound1() {
+            var audio = document.getElementById("audio8");
+            audio.play();
+        }
+    </script>
       <br>
       <br>
       <img src=".\pictures\quit.png" alt="game" width="100" height="100" align="center"></p>
