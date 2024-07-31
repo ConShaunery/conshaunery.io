@@ -42,7 +42,7 @@
 </head>
 <body>
     <div class="container">
-        <audio id="backgroundAudio" autoplay>
+        <audio id="backgroundAudio" autoplay muted>
             <source src="./sounds/titlescreen.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
@@ -72,6 +72,16 @@
                 audio.play();
             }
         }
+
+        window.addEventListener('load', function() {
+            var audio = document.getElementById('backgroundAudio');
+            if (audio) {
+                audio.muted = false;
+                audio.play().catch(function(e) {
+                    console.log("Autoplay was prevented: ", e);
+                });
+            }
+        });
     </script>
 </body>
 <footer>
@@ -84,3 +94,4 @@
     </div>
 </footer>
 </html>
+
