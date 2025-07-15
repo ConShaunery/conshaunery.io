@@ -35,8 +35,8 @@
   <body>
     <div class="container">
       <h1 style="font-size: xxx-large;">[CS]</h1>
-      <br>
-      <br>
+      <br><br>
+
       <h6><a href="dreams.html">dreams</a></h6>
       <br>
       <h3><a href="weather.html">weather</a></h3>
@@ -58,7 +58,6 @@
           audio.play();
         }
       </script>
-
       <br>
       <h3><a href="music.html" onmouseover="playSound4()">music</a></h3>
       <audio id="audio4" src="./sounds/doot.mp3"></audio>
@@ -68,9 +67,7 @@
           audio.play();
         }
       </script>
-
       <br>
-      
       <h3><a href="games.html" onmouseover="playSound2()">games</a></h3>
       <audio id="audio2" src="./sounds/games_homestar.mp3"></audio>
       <script>
@@ -79,9 +76,8 @@
           audio.play();
         }
       </script>
-
       <br>
-      <h3><a href="stream.html"onmouseover="playSound6()">stream</a></h3>
+      <h3><a href="stream.html" onmouseover="playSound6()">stream</a></h3>
       <audio id="audio6" src="./sounds/navi_hello.mp3"></audio>
       <script>
         function playSound6() {
@@ -98,31 +94,47 @@
           audio.play();
         }
       </script>
-      
       <br>
-      <h3><a href="help.html" onmouseover="playSound3()">help</a></h3> <!-- Added space before "onmouseover" and changed function name to playSound3() -->
+      <h3><a href="help.html" onmouseover="playSound3()">help</a></h3>
       <audio id="audio3" src="./sounds/shutup2.wav"></audio>
       <script>
-        function playSound3() { // Changed function name to playSound3()
+        function playSound3() {
           var audio = document.getElementById("audio3");
           audio.play();
         }
       </script>
-      <br><h6><a href="leave.html" onmouseover="playSound7()">leave</a></h6>
+      <br>
+      <h6><a href="leave.html" onmouseover="playSound7()">leave</a></h6>
       <audio id="audio7" src="./sounds/IntroWorld_38.wav"></audio>
       <script>
         function playSound7() {
           var audio = document.getElementById("audio7");
           audio.play();
         }
-      <div align='center'>
-  <script type="text/javascript" src="https://counter.websiteout.com/js/6/0/0/0"></script>
-</div>
+      </script>
+      <br><br><br>
+
+      <!-- Website counter -->
+      <div align="center">
+        <script type="text/javascript" src="https://counter.websiteout.com/js/6/0/0/0"></script>
+      </div>
     </div>
-    <footer> <!-- Moved footer inside the container div -->
+
+    <footer>
       <div class="container">
         <div class="row">
           <div class="col-md-12 text-center">
-            <p style="font-size: xx-small;"> 2023 &copy; conshaunery.com | All rights reserved ...ᵒʳ ⁿᵒᵗ ᵖˡᵉᵃˢᵉ ᵈᵒⁿᵗ ˢᵘᵉ ᵐᵉ | <a href="godzilla.html">godzilla | <a href="language.html">language</a> | <a href="ベイブレード.html">ベイブレード</a> | conshaunery was here <img src="./pictures/conshaun.jpg" alt="logo" width="50" height="50" align="right"></p> <!-- Added "./" before pictures directory to ensure it's correctly referenced -->
+            <p style="font-size: xx-small;">
+              2023 &copy; conshaunery.com | All rights reserved ...ᵒʳ ⁿᵒᵗ ᵖˡᵉᵃˢᵉ ᵈᵒⁿᵗ ˢᵘᵉ ᵐᵉ |
+              <a href="godzilla.html">godzilla</a> |
+              <a href="language.html">language</a> |
+              <a href="ベイブレード.html">ベイブレード</a> |
+              conshaunery was here
+              <img src="./pictures/conshaun.jpg" alt="logo" width="50" height="50" align="right">
+            </p>
           </div>
-       
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
