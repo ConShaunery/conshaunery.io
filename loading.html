@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Loading... 🍉</title>
+  <style>
+    html {
+      background-color: black;
+      background-repeat: repeat;
+      background-size: cover; /* Ensure the gif fills screen if needed */
+    }
+
+    body {
+      color: #00ff00;
+      font-family: "Comic Sans MS", cursive;
+      text-align: center;
+      padding: 50px;
+      margin: 0;
+    }
+
+    #loading-box {
+      border: 3px double #ff00ff;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      max-width: 400px;
+      margin: 50px auto;
+      box-shadow: 5px 5px 0 #000;
+    }
+
+    .spinner {
+      margin: 20px auto;
+      max-width: 100%;
+      display: block;
+    }
+
+    .progress-bar {
+      width: 100%;
+      background-color: #333;
+      border: 1px solid #00ff00;
+      height: 20px;
+      margin-top: 10px;
+    }
+
+    .progress {
+      height: 100%;
+      background-color: lime;
+      width: 0%;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading-box">
+    <h1>🌈 ConShaunery Zone 🌈</h1>
+    <p id="loading-message">Loading...</p>
+    <img id="loadingImage" class="spinner" alt="loading gif">
+
+    <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+    </div>
+    <p style="font-size: small;">Loading from deep web archives...</p>
+  </div>
+
+  <script>
+    const backgroundImages = [
+      "./gifs/loading_1.png",
+      "./gifs/loading.png",
+      "./gifs/neveralone.gif",
+      "./gifs/window.gif"
+    ];
+
+    const loadingImages = [
+      "./gifs/loading_1.png",
+      "./gifs/loading.png",
+      "./gifs/neveralone.gif",
+      "./gifs/window.gif"
+    ];
+
+    const messages = [
+      "Loading secret content...",
+      "Connecting to the DreamNet...",
+      "Dialing into cyberspace...",
+      "Uploading vibes...",
+      "Compiling melon fragments..."
+    ];
+
+    // Set random background on <html>
+    const randomBg = backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
+    document.documentElement.style.backgroundImage = `url('${randomBg}')`;
+
+    // Set random loading image
+    const randomImage = loadingImages[Math.floor(Math.random() * loadingImages.length)];
+    document.getElementById("loadingImage").src = randomImage;
+
+    // Set random loading message
+    const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+    document.getElementById("loading-message").textContent = randomMsg;
+
+    // Fake progress bar
+    let progress = 0;
+    const bar = document.getElementById('progress');
+    const interval = setInterval(() => {
+      progress += Math.random() * 10;
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(interval);
+        document.body.innerHTML += '<p><b>✨ Loaded! ✨</b></p>';
+      }
+      bar.style.width = progress + '%';
+    }, 300);
+  </script>
+</body>
+</html>

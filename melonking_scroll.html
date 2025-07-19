@@ -1,0 +1,245 @@
+<html><head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=0.37">
+        <title>NAV MENU</title>
+        <link href="styles/common.css" rel="stylesheet" type="text/css" media="all">
+        <style>
+            body {
+                /* Cool dark blue! #000020 */
+                background-color: #000014;
+                /* background-image: linear-gradient(#1a2964, #00051e); */
+                background-image: linear-gradient(#210971, #020010);
+                color: yellow;
+                text-align: center;
+                /* box-shadow: inset 0px 0px 50px 0px #000014; */
+            }
+
+            #bubbles {
+                background-image: url("./gifs/faces.gif");
+                background-size: 100%;
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                top: 0px;
+                float: left;
+                z-index: -10;
+                opacity: 0.9;
+            }
+
+            a {
+                text-decoration: underline;
+            }
+
+            a:hover {
+                cursor: pointer;
+            }
+
+            h1 {
+                font-size: 16px;
+                padding-top: 10px;
+                margin: 0px;
+                padding-bottom: 15px;
+                color: #ffd596;
+            }
+
+            li {
+                font-size: 13px;
+                margin-bottom: 12px;
+                font-weight: bold;
+                transform: rotate(6deg);
+            }
+
+            ul {
+                list-style: none;
+                margin: 0;
+                padding: 10px 5px 25px 5px;
+            }
+
+            li a {
+                color: #fffd0c;
+            }
+
+            li a:hover {
+                color: white;
+            }
+
+            img {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            ul img {
+                width: 45px;
+            }
+
+            ul img,
+            .badges img {
+                image-rendering: pixelated;
+                image-rendering: crisp-edges;
+            }
+
+            .badges img {
+                margin-bottom: 5px;
+                max-width: 88px;
+            }
+
+            .wider img {
+                width: 60px;
+            }
+
+            .thinner img {
+                width: 40px;
+            }
+
+            .even-thinner img {
+                width: 35px;
+            }
+
+            .nav-block {
+                background-color: yellow;
+                padding: 5px 0 5px 0;
+                color: black;
+                font-size: 14px;
+                margin-bottom: 35px;
+            }
+
+            #mood {
+                font-size: 12px;
+            }
+
+            #mood img {
+                height: 17px;
+            }
+
+            #hitcounter,
+            #hitcounter a {
+                background-color: black;
+                color: yellow;
+            }
+
+            #guide {
+                font-size: 13px;
+                margin-bottom: 0px;
+                padding: 0px;
+                color: #d7f3ff;
+            }
+            #guide a {
+                color: #d7f3ff;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="bubbles"></div>
+        <!-- <p id="guide">
+            <a href="frames/guide.html"><img class="twist" src="images/animated-info-sign-image-0012.gif" /></a>
+        </p> -->
+        <h1>ConShaun's InterConnectedCyber-Super Highway!:</h1>
+        <ul>
+           <li>
+                 <a href="home.html" target="main"><img class="twist" src="./gifs/earth.gif" alt="Home">Home</a>
+            </li>
+
+            <li>
+                 <a href="dreams.html" target="main"><img class="twist" src="./gifs/sleep2.gif" alt="Dreams">Dreams</a>
+            </li>
+            <li>
+                 <a href="pics.html" target="main"><img class="twist" src="./gifs/camera.gif" alt="Pics">Pics</a>
+            </li>
+            <li>
+                 <a href="vids.html" target="main"><img class="twist" src="./gifs/vhs.gif" alt="Vids">Vids</a>
+            </li>
+            <li>
+                 <a href="music.html" target="main"><img class="twist" src="./gifs/cassette.gif" alt="Music">Music</a>
+            </li>
+            <li>
+                 <a href="games.html" target="main"><img class="twist" src="./gifs/psx_controller.gif" alt="Games">Games</a>
+            </li>
+            <li>
+                 <a href="under_construct.html" target="main"><img class="twist" src="./gifs/floppy2.gif" alt="Downloads">Downloads</a>
+            </li>
+            <li>
+                 <a href="stream.html" target="main"><img class="twist" src="./gifs/stream.gif" alt="stream">streams</a>
+            </li>
+            <li>
+                 <a href="faq.html" target="main"><img class="twist" src="./gifs/faq.gif" alt="faq">faq</a>
+            </li>
+            <li>
+                 <a href="leave.html" target="main"><img class="twist" src="./gifs/ufo.gif" alt="leave">leave</a>
+            </li>
+            <li>
+                 <a href="under_construct.html" target="main"><img class="twist" src="./gifs/book.gif" alt="GUEST BOOK">GUEST BOOOK</a>
+            </li>
+        </ul>
+
+        <br>
+
+        <script>
+            let nav = {};
+
+            window.addEventListener("DOMContentLoaded", async () => {
+                nav.audio = {};
+                nav.audio.elevator = new Audio("/audio/elevator.mp3");
+                nav.audio.click = new Audio("/audio/ui/click.mp3");
+                nav.audio.interact = new Audio("/audio/ui/drip.mp3");
+                nav.audio.interact.volume = 0.3;
+
+                nav.audio.context = new AudioContext();
+                nav.audio.track = {};
+                nav.audio.track.elevator = nav.audio.context.createMediaElementSource(nav.audio.elevator);
+                nav.audio.track.elevator.connect(nav.audio.context.destination);
+                nav.audio.track.click = nav.audio.context.createMediaElementSource(nav.audio.click);
+                nav.audio.track.click.connect(nav.audio.context.destination);
+                nav.audio.track.interact = nav.audio.context.createMediaElementSource(nav.audio.interact);
+                nav.audio.track.interact.connect(nav.audio.context.destination);
+
+                nav.hits = document.getElementById("hits-box");
+                nav.links = document.getElementsByTagName("a");
+
+                // Elevator Links
+                for (var i = 0, len = nav.links.length; i < len; i++) {
+                    if(nav.links[i].target != "_blank") {
+                        let url = nav.links[i].href;
+                        nav.links[i].removeAttribute("href");
+                        nav.links[i].onclick = async function () {
+                            nav.audio.elevator.currentTime = 0;
+                            nav.audio.elevator.play();
+                            nav.audio.click.play();
+                            window.open("./loading.html", "main");
+                            await sleep(2050);
+                            window.open(url, "main");
+                        };
+                    }
+                }
+
+                // Hit Counter
+                fetch("https://brain.melonking.net/melon-hits")
+                    .then(function (response) {
+                        return response.text();
+                    })
+                    .then(function (responseText) {
+                        if (responseText != "error") {
+                            nav.hits.innerHTML = '<strong><a target="main" href="https://brain.melonking.net/melon-hits?info=1">' + responseText + " HITS</a></strong>";
+                        }
+                    });
+
+                // Interact Sounds
+                document.addEventListener("mouseover", (e) => {
+                    if (e.target.tagName == "BUTTON" || e.target.tagName == "A") {
+                        nav.audio.interact.play();
+                    }
+                });
+
+                document.addEventListener("click", (e) => {
+                    if (e.target.tagName == "BUTTON" || e.target.tagName == "A") {
+                        nav.audio.click.play();
+                    }
+                });
+            });
+
+            function sleep(ms) {
+                return new Promise((resolve) => setTimeout(resolve, ms));
+            }
+        </script>
+    
+</body></html>
