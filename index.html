@@ -4,7 +4,7 @@
   <title>conshaunery.com</title>
   <style>
     body {
-      background-color: #252222;
+      background-color: #1c1b1b;
       color: white;
       font-family: Helvetica, Arial, sans-serif;
       font-size: 16px;
@@ -48,6 +48,11 @@
       display: none;
     }
 
+    #name-reaction {
+      font-style: italic;
+      margin-top: 10px;
+    }
+
     #enter-line a {
       color: orange;
       font-size: 18px;
@@ -64,23 +69,26 @@
       font-weight: bold;
       margin-top: 20px;
     }
+
+    #rejection-line button {
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
-   <audio autoplay loop>
-    <source src="./sounds/sunset.mp3" type="audio/mpeg">
-  </audio>
-
 
   <img src="./gifs/moon_face.gif" alt="logo" width="500">
 
+  <!-- Step 1 -->
   <div class="dialogue" id="step1">
-    <h1>"Oh...And whomest could dis be?"</h1>
+    <h1>"Oh... And whomest could dis be?"</h1>
     <input type="text" id="q1" placeholder="Your name?">
+    <p id="name-reaction" class="hidden"></p>
     <br>
     <button onclick="nextStep(1)">Proceed</button>
   </div>
 
+  <!-- Step 2 -->
   <div class="dialogue hidden" id="step2">
     <h1>"Un traveller, perchance... But from where?"</h1>
     <input type="text" id="q2" placeholder="From where do you come?">
@@ -88,41 +96,73 @@
     <button onclick="nextStep(2)">Proceed</button>
   </div>
 
+  <!-- Step 3 -->
   <div class="dialogue hidden" id="step3">
-    <h2>"What dost thou sikhz in these cyberrealm?"</h2>
-    <input type="text" id="q3" placeholder='Speak for I have spoken..."'>
+    <h2>"What dost thou seek in these shadowed scrolls?"</h2>
+    <input type="text" id="q3" placeholder='Speak for I have spoken...'>
     <br>
     <button onclick="finalCheck()">Reveal My Destiny</button>
   </div>
 
+  <!-- Entry line if correct -->
   <div id="enter-line" class="hidden">
-    <h1>"Is thats so?... Then you shallest enterz..."</h1>
+    <h1>"Is that so?... Then you shallest enterz..."</h1>
     <p><a href="main.html">✨ Enter the Realm ✨</a></p>
   </div>
 
+  <!-- Rejection line -->
   <div id="rejection-line" class="hidden">
-  <p>"Fie! Your intentions feel... impure. Be gone thot! For I never knew you..."</p>
-  <button onclick="window.location.href='https://search.brave.com'">Seek Your Truth Elsewhere...</button>
-</div>
+    <p>"Fie! Your intentions feel... impure."</p>
+    <button onclick="redirectToBrave()">Try the outside world instead</button>
+  </div>
 
+  <!-- Audio Setup -->
+  <audio id="bg-music" loop>
+    <source src="./sounds/sunset.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 
+  <!-- Script -->
   <script>
+    function startAudio() {
+      const audio = document.getElementById("bg-music");
+      if (!window.audioStarted) {
+        audio.play().catch(() => {}); // Silent catch for browser autoplay block
+        window.audioStarted = true;
+      }
+    }
+
     function nextStep(current) {
-      document.getElementById("step" + current).classList.add("hidden");
-      document.getElementById("step" + (current + 1)).classList.remove("hidden");
+      if (current === 1) {
+        const name = document.getElementById("q1").value.trim();
+        const reaction = document.getElementById("name-reaction");
+
+        if (name.length === 0) {
+          reaction.textContent = "A name must be spoken...";
+          reaction.classList.remove("hidden");
+          return;
+        }
+
+        reaction.textContent = `"${name}"... A name most curious...`;
+        reaction.classList.remove("hidden");
+
+        // Delay before showing next step
+        setTimeout(() => {
+          document.getElementById("step1").classList.add("hidden");
+          document.getElementById("step2").classList.remove("hidden");
+        }, 2000);
+      } else {
+        document.getElementById("step" + current).classList.add("hidden");
+        document.getElementById("step" + (current + 1)).classList.remove("hidden");
+      }
+
+      startAudio();
     }
 
     function finalCheck() {
       const answer = document.getElementById("q3").value.trim().toLowerCase();
-      const accepted = [
-        "refuge",
-        "vibez",
-        "knownledge",
-        "past",
-        "truth"
-      ];
+      const accepted = ["refuge", "vibez", "knownledge", "past", "truth"];
 
-      // Hide previous steps
       document.getElementById("step3").classList.add("hidden");
 
       if (accepted.includes(answer)) {
@@ -132,6 +172,10 @@
         document.getElementById("enter-line").classList.add("hidden");
         document.getElementById("rejection-line").classList.remove("hidden");
       }
+    }
+
+    function redirectToBrave() {
+      window.location.href = "https://search.brave.com";
     }
   </script>
 
