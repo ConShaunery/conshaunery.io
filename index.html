@@ -81,7 +81,7 @@
 
   <!-- Step 1 -->
   <div class="dialogue" id="step1">
-    <h1>"Oh... And whomest could dis be?"</h1>
+    <h1 id="initial-greeting">"Oh... And whomest could dis be?"</h1>
     <input type="text" id="q1" placeholder="Your name?">
     <p id="name-reaction" class="hidden"></p>
     <br>
@@ -131,6 +131,12 @@
         window.audioStarted = true;
       }
     }
+document.addEventListener("DOMContentLoaded", () => {
+  const wasRejected = localStorage.getItem("rejectedVisitor");
+  if (wasRejected === "true") {
+    document.getElementById("initial-greeting").textContent = '"Oh... so you\'ve returned..."';
+  }
+});
 
     function nextStep(current) {
       if (current === 1) {
@@ -172,6 +178,17 @@
         document.getElementById("enter-line").classList.add("hidden");
         document.getElementById("rejection-line").classList.remove("hidden");
       }
+
+      if (accepted.includes(answer)) {
+  localStorage.removeItem("rejectedVisitor"); // Clear flag if accepted
+  document.getElementById("rejection-line").classList.add("hidden");
+  document.getElementById("enter-line").classList.remove("hidden");
+} else {
+  localStorage.setItem("rejectedVisitor", "true"); // Mark them as rejected
+  document.getElementById("enter-line").classList.add("hidden");
+  document.getElementById("rejection-line").classList.remove("hidden");
+}
+
     }
 
     function redirectToBrave() {
