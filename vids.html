@@ -5,9 +5,8 @@
 <title>conshaunery.com / vids</title>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <style>
-  :root {
-    --bg-tile-size: 50%;
-  }
+  :root { --bg-tile-size: 50%; }
+
   body {
     background: #000 url("./gifs/stars 11.gif") repeat;
     background-size: var(--bg-tile-size);
@@ -46,6 +45,7 @@
     margin: 0 auto;
     padding: 32px 20px 80px;
   }
+
   h1, h2, h3 {
     text-align: center;
     font-weight: bold;
@@ -56,20 +56,43 @@
   a { color: orange; text-decoration: none; }
   a:hover { color: #fff; }
 
-  .nav {
+  .nav, .sub-nav {
     text-align: center;
     margin-bottom: 28px;
   }
-  .nav a {
+  .nav a, .sub-nav a {
     margin: 0 8px;
     font-weight: 600;
+    font-size: 14px;
   }
+  .sub-nav {
+    margin-top: -10px;
+    margin-bottom: 40px;
+    font-size: 13px;
+    opacity: .85;
+  }
+  .sub-nav a { text-decoration: underline; }
 
   .bg-audio-status {
     text-align: center;
     font-size: 12px;
     opacity: 0.7;
-    margin: 4px 0 30px;
+    margin: 6px 0 30px;
+  }
+
+  /* Section wrapper */
+  section {
+    margin-top: 70px;
+  }
+  section:first-of-type {
+    margin-top: 30px;
+  }
+  section h2 {
+    letter-spacing: 1px;
+    text-transform: lowercase;
+  }
+  section h3 {
+    margin-top: 0;
   }
 
   /* Video Grid */
@@ -117,7 +140,7 @@
   }
 
   footer {
-    margin-top: 70px;
+    margin-top: 90px;
     text-align: center;
     font-size: 11px;
     opacity: 0.75;
@@ -125,6 +148,13 @@
 
   @media (max-width: 600px) {
     .container { padding: 28px 14px 70px; }
+  }
+
+  /* Divider style (optional) */
+  .divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,140,0,0.6), transparent);
+    margin: 50px 0 40px;
   }
 </style>
 </head>
@@ -145,6 +175,13 @@
     <a href="help.html">help</a>
   </div>
 
+  <!-- Quick jump links -->
+  <div class="sub-nav">
+    <a href="#vault">vhs vault</a> |
+    <a href="#myvideos">my videos</a> |
+    <a href="#othervidz">other vidz</a>
+  </div>
+
   <!-- Background Audio -->
   <audio id="bg-audio" autoplay loop preload="auto">
     <source src="./sounds/Adrianna Kirikl 02 Glitch.mp3" type="audio/mpeg">
@@ -152,135 +189,142 @@
   </audio>
   <div class="bg-audio-status" id="bg-status">Background track: normal volume.</div>
 
-  <h3>vhs vault</h3>
-  <div class="video-grid">
-    <div class="video-card">
-      <h4>The Internet For Beginners (1998)</h4>
-      <iframe
-        src="https://archive.org/embed/theinternetforbeginners1998"
-        title="The Internet For Beginners 1998"
-        loading="lazy"
-        allowfullscreen>
-      </iframe>
-      <small>archive.org embed</small>
+  <!-- VHS Vault -->
+  <section id="vault">
+    <h2>vhs vault</h2>
+    <div class="video-grid">
+      <div class="video-card">
+        <h4>The Internet For Beginners (1998)</h4>
+        <iframe
+          src="https://archive.org/embed/theinternetforbeginners1998"
+          title="The Internet For Beginners 1998"
+          loading="lazy"
+          allowfullscreen>
+        </iframe>
+        <small>archive.org embed</small>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <h2 style="margin-top:60px;">my videos</h2>
-  <div class="video-grid" id="my-videos">
+  <div class="divider"></div>
 
-    <!-- SAMPLE LOCAL VIDEOS - duplicate blocks as needed -->
-    <div class="video-card">
-      <h4>UFO Truth</h4>
-      <video controls preload="none" data-title="UFO Truth">
-        <source src="./vids/WATCH NOW!!! The Truth Revealed About UFOs!!!.mp4" type="video/mp4">
-      </video>
-      <small>Local clip</small>
+  <!-- My Videos -->
+  <section id="myvideos">
+    <h2>my videos</h2>
+    <div class="video-grid">
+
+      <div class="video-card">
+        <h4>UFO Truth</h4>
+        <video controls preload="none" data-title="UFO Truth">
+          <source src="./vids/WATCH NOW!!! The Truth Revealed About UFOs!!!.mp4" type="video/mp4">
+        </video>
+        <small>Local clip</small>
+      </div>
+
+      <div class="video-card">
+        <h4>Halo CE</h4>
+        <video controls preload="none" data-title="Halo CE">
+          <source src="./vids/haloce.mp4" type="video/mp4">
+        </video>
+      </div>
+
     </div>
+  </section>
 
-    <div class="video-card">
-      <h4>Halo CE</h4>
-      <video controls preload="none" data-title="Halo CE">
-        <source src="./vids/haloce.mp4" type="video/mp4">
-      </video>
+  <div class="divider"></div>
+
+  <!-- Other Vidz -->
+  <section id="othervidz">
+    <h2>other vidz</h2>
+    <div class="video-grid">
+
+      <div class="video-card">
+        <h4>Cat Harmonics</h4>
+        <video controls preload="none" data-title="Cat Harmonics">
+          <source src="./vids/cat_hermonics.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-card">
+        <h4>German Cola</h4>
+        <video controls preload="none" data-title="German Cola">
+          <source src="./vids/germancola.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-card">
+        <h4>Turkey</h4>
+        <video controls preload="none" data-title="Turkey">
+          <source src="./vids/turkey.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-card">
+        <h4>Rubert</h4>
+        <video controls preload="none" data-title="Rubert">
+          <source src="./vids/rubert.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-card">
+        <h4>Millkers</h4>
+        <video controls preload="none" data-title="Millkers">
+          <source src="./vids/millkers.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-card">
+        <h4>Fotosynthasis</h4>
+        <video controls preload="none" data-title="Fotosynthasis">
+          <source src="./vids/fotosynthasis.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-card">
+        <h4>edging</h4>
+        <video controls preload="none" data-title="Edging">
+          <source src="./vids/edging.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-card">
+        <h4>frog_guy</h4>
+        <video controls preload="none" data-title="frog_guy">
+          <source src="./vids/frog_guy.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-card">
+        <h4>irs_guy</h4>
+        <video controls preload="none" data-title="irs_guy">
+          <source src="./vids/irs.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-card">
+        <h4>children</h4>
+        <video controls preload="none" data-title="children">
+          <source src="./vids/children.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-card">
+        <h4>butt_i_do</h4>
+        <video controls preload="none" data-title="butt_i_do">
+          <source src="./vids/butt_i_do.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="video-card">
+        <h4>connection_terminated</h4>
+        <video controls preload="none" data-title="connection_terminated">
+          <!-- Space in filename encoded; consider renaming to connection_terminated.mp4 -->
+          <source src="./vids/connection%20terminated.mp4" type="video/mp4">
+        </video>
+      </div>
+
     </div>
-<br>
-<br>
-<br>
-<br>
-    <h3>Other vidz</h3>
-<br>
-<br>
-<br>
-<br>
-
-
-    <div class="video-card">
-      <h4>Cat Harmonics</h4>
-      <video controls preload="none" data-title="Cat Harmonics">
-        <source src="./vids/cat_hermonics.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="video-card">
-      <h4>German Cola</h4>
-      <video controls preload="none" data-title="German Cola">
-        <source src="./vids/germancola.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="video-card">
-      <h4>Turkey</h4>
-      <video controls preload="none" data-title="Turkey">
-        <source src="./vids/turkey.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="video-card">
-      <h4>Rubert</h4>
-      <video controls preload="none" data-title="Rubert">
-        <source src="./vids/rubert.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="video-card">
-      <h4>Millkers</h4>
-      <video controls preload="none" data-title="Millkers">
-        <source src="./vids/millkers.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="video-card">
-      <h4>Fotosynthasis</h4>
-      <video controls preload="none" data-title="Fotosynthasis">
-        <source src="./vids/fotosynthasis.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="video-card">
-      <h4>edging</h4>
-      <video controls preload="none" data-title="Edging">
-        <source src="./vids/edging.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="video-card">
-      <h4>frog_guy</h4>
-      <video controls preload="none" data-title="frog_guy">
-        <source src="./vids/frog_guy.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    
-    <div class="video-card">
-      <h4>irs_guy</h4>
-      <video controls preload="none" data-title="irs_guy">
-        <source src="./vids/irs.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="video-card">
-      <h4>children</h4>
-      <video controls preload="none" data-title="children">
-        <source src="./vids/children.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="video-card">
-      <h4>butt_i_do</h4>
-      <video controls preload="none" data-title="butt_i_do">
-        <source src="./vids/butt_i_do.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="video-card">
-      <h4>connection_terminated</h4>
-      <video controls preload="none" data-title="connection_terminated">
-        <source src="./vids/connection terminated.mp4" type="video/mp4">
-      </video>
-    </div>
-
-  </div>
+  </section>
 
   <footer>
     conshaunery was here.<br>
@@ -301,8 +345,8 @@ const FADE_MS = 500;          // Fade time in ms
    =============================== */
 const bgAudio = document.getElementById('bg-audio');
 const statusEl = document.getElementById('bg-status');
-const muteBtn = document.getElementById('muteBtn');
-const videos = Array.from(document.querySelectorAll('video'));
+const muteBtn  = document.getElementById('muteBtn');
+let videos     = Array.from(document.querySelectorAll('video'));
 
 let targetVolume = BASE_VOLUME;
 let fadeFrame = null;
@@ -326,7 +370,7 @@ if (isMuted) {
    FADE / DUCK LOGIC
    =============================== */
 function fadeTo(vol) {
-  if (bgAudio.muted) return; // skip fading if muted
+  if (bgAudio.muted) return;
   targetVolume = vol;
   const startVol = bgAudio.volume;
   const startTime = performance.now();
@@ -351,11 +395,12 @@ function updateDuck() {
   }
 }
 
-/* Attach listeners to each video */
-videos.forEach(v => {
+/* Attach listeners */
+function attachVideoListeners(v) {
   ['play','playing'].forEach(evt => v.addEventListener(evt, updateDuck));
   ['pause','ended','abort','error','emptied'].forEach(evt => v.addEventListener(evt, updateDuck));
-});
+}
+videos.forEach(attachVideoListeners);
 
 /* ===============================
    MUTE TOGGLE
@@ -366,15 +411,13 @@ muteBtn.addEventListener('click', () => {
   localStorage.setItem('bgMuted', isMuted ? 'true' : 'false');
   muteBtn.textContent = isMuted ? '🔇' : '🔊';
   muteBtn.setAttribute('aria-pressed', isMuted ? 'true' : 'false');
-
   if (!isMuted) {
-    // When unmuting, reflect current duck state
     updateDuck();
     muteBtn.animate([{transform:'scale(0.9)'},{transform:'scale(1)'}], {duration:180});
   }
 });
 
-/* In case user interacts late and autoplay was blocked */
+/* Handle possible blocked autoplay */
 document.addEventListener('click', () => {
   if (bgAudio.paused && !isMuted) {
     bgAudio.play().catch(()=>{});
