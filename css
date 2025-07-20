@@ -1,4 +1,5 @@
 <style>
+
   body {
     background-color: black;
     color: white;
@@ -12,7 +13,7 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 40px 20px;
-    text-align: center; /* THIS centers all text and inline content */
+    text-align: center;
   }
 
   a {
@@ -28,4 +29,68 @@
     max-width: 100%;
     height: auto;
   }
+
+  /* FIXED: Closed orbit-container block properly */
+  .orbit-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+  }
+
+  .orbit {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform-origin: 0 50px;
+    animation: spin 4s linear infinite;
+  }
+
+  .bobbing {
+    animation: bob 2s infinite ease-in-out;
+  }
+
+  @keyframes spin {
+    0%   { transform: rotate(0deg) translateX(50px) rotate(0deg); }
+    100% { transform: rotate(360deg) translateX(50px) rotate(-360deg); }
+  }
+
+  @keyframes bob {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+  }
+  .video-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+.video-card { flex: 1 1 300px; max-width: 320px; }
+#muteBtn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 1000;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.4);
+  padding: 8px 12px;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 6px;
+  backdrop-filter: blur(3px);
+  transition: background .25s, transform .25s, border-color .25s;
+}
+#muteBtn:hover {
+  background: rgba(255,140,0,0.85);
+  border-color: orange;
+  transform: translateY(-2px);
+}
+#muteBtn:active {
+  transform: scale(0.9);
+}
+
+
 </style>
