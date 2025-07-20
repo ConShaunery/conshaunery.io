@@ -1,26 +1,136 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>conshaunery.com</title>
-  </head>
-  <frameset cols="200px,*" border="0">
-    <frame name="nav" src="melonking_scroll.html" noresize scrolling="auto">
-    <frame name="main" src="home.html">
-  </frameset>
-  <noframes>
-    <body>Your browser does not support frames. Visit <a href="home.html">home.html</a>.</body>
-  </noframes>
-</html>
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>conshaunery.com</title>
-  </head>
-  <frameset cols="200px,*" border="0">
-    <frame name="nav" src="melonking_scroll.html" noresize scrolling="auto">
-    <frame name="main" src="home.html">
-  </frameset>
-  <noframes>
-    <body>Your browser does not support frames. Visit <a href="home.html">home.html</a>.</body>
-  </noframes>
+<head>
+  <title>conshaunery.com</title>
+  <style>
+    body {
+      background-color: rgb(34, 32, 32);
+      color: white;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    h1, h2 {
+      display: none;
+      font-weight: bold;
+    }
+
+    #response-box {
+      display: none;
+      margin-top: 20px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 18px;
+      width: 80%;
+      max-width: 400px;
+      border: 2px solid #aaa;
+      border-radius: 5px;
+      background-color: #222;
+      color: white;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      font-size: 16px;
+      background-color: rgb(118, 53, 161);
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: orange;
+      color: black;
+    }
+
+    #enter-line, #rejection-line {
+      display: none;
+      margin-top: 30px;
+    }
+
+    #enter-line a {
+      color: orange;
+      font-size: 18px;
+      text-decoration: underline;
+    }
+
+    #enter-line a:hover {
+      color: white;
+    }
+
+    #rejection-line {
+      color: crimson;
+      font-size: 22px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <audio autoplay loop>
+    <source src="./sounds/music/your_intro_music.mp3" type="audio/mpeg">
+  </audio>
+
+  <img src="./gifs/moon_face.gif" alt="logo" width="500" height="500">
+
+  <!-- Original Intro Lines -->
+  <h1 id="line1">"Oh...And whomest could dis be?"</h1>
+  <h1 id="line2">"Un traveller, perchance?"</h1>
+  <h2 id="line3">"What brings you to this farside of the cyberverse?"</h2>
+
+  <!-- Response Input -->
+  <div id="response-box">
+    <p>Speak thy truth:</p>
+    <input type="text" id="userInput" placeholder='Type something like "I sikhz the vibez..."'>
+    <br>
+    <button onclick="checkAnswer()">Submit</button>
+  </div>
+
+  <!-- Correct Response -->
+  <div id="enter-line">
+    <h1 style="display: block;">"Is thats so?...Then you shallest enterz..."</h1>
+    <p><a href="main.html">Enter the Realm</a></p>
+  </div>
+
+  <!-- Incorrect Response -->
+  <h1 id="rejection-line">"Hmm...Thy words ring false, traveler..."</h1>
+
+  <script>
+    setTimeout(() => document.getElementById("line1").style.display = "block", 1000);
+    setTimeout(() => document.getElementById("line2").style.display = "block", 3000);
+    setTimeout(() => document.getElementById("line3").style.display = "block", 5000);
+    setTimeout(() => document.getElementById("response-box").style.display = "block", 7000);
+
+    function hideIntroLines() {
+      document.getElementById("line1").style.display = "none";
+      document.getElementById("line2").style.display = "none";
+      document.getElementById("line3").style.display = "none";
+    }
+
+    function checkAnswer() {
+      const input = document.getElementById("userInput").value.trim().toLowerCase();
+      const accepted = [
+        "i sikhz the refuge",
+        "i sikhz the vibez",
+        "i sikhz the knownledge",
+        "i sikhz ze past"
+      ];
+
+      hideIntroLines();
+      document.getElementById("rejection-line").style.display = "none";
+      document.getElementById("enter-line").style.display = "none";
+
+      if (accepted.includes(input)) {
+        document.getElementById("enter-line").style.display = "block";
+      } else {
+        document.getElementById("rejection-line").style.display = "block";
+      }
+    }
+  </script>
+</body>
 </html>
