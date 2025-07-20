@@ -4,7 +4,7 @@
   <title>conshaunery.com</title>
   <style>
     body {
-      background-color: rgb(34, 32, 32);
+      background-color: #1c1b1b;
       color: white;
       font-family: Helvetica, Arial, sans-serif;
       font-size: 16px;
@@ -12,13 +12,7 @@
       padding: 40px 20px;
     }
 
-    h1, h2 {
-      display: none;
-      font-weight: bold;
-    }
-
-    #response-box {
-      display: none;
+    .dialogue {
       margin-top: 20px;
     }
 
@@ -27,21 +21,22 @@
       font-size: 18px;
       width: 80%;
       max-width: 400px;
-      border: 2px solid #aaa;
+      border: 2px solid #555;
       border-radius: 5px;
       background-color: #222;
       color: white;
       text-align: center;
+      margin-bottom: 10px;
     }
 
     button {
       padding: 10px 20px;
-      margin-top: 10px;
       font-size: 16px;
-      background-color: rgb(118, 53, 161);
-      border: none;
+      background-color: purple;
       color: white;
+      border: none;
       cursor: pointer;
+      margin: 10px;
     }
 
     button:hover {
@@ -49,9 +44,8 @@
       color: black;
     }
 
-    #enter-line, #rejection-line {
+    .hidden {
       display: none;
-      margin-top: 30px;
     }
 
     #enter-line a {
@@ -66,71 +60,78 @@
 
     #rejection-line {
       color: crimson;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: bold;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <audio autoplay loop>
+   <audio autoplay loop>
     <source src="./sounds/sunset.mp3" type="audio/mpeg">
   </audio>
 
-  <img src="./gifs/moon_face.gif" alt="logo" width="500" height="500">
 
-  <!-- Original Intro Lines -->
-  <h1 id="line1">"Oh...And whomest could dis be?"</h1>
-  <h1 id="line2">"Un traveller, perchance?"</h1>
-  <h2 id="line3">"What brings you to this farside of the cyberverse?"</h2>
+  <img src="./gifs/moon_face.gif" alt="logo" width="500">
 
-  <!-- Response Input -->
-  <div id="response-box">
-    <p>Speak thy truth:</p>
-    <input type="text" id="userInput" placeholder='Speak! Wali. For I have Spoken..."'>
+  <div class="dialogue" id="step1">
+    <h1>"Oh...And whomest could dis be?"</h1>
+    <input type="text" id="q1" placeholder="Your name?">
     <br>
-    <button onclick="checkAnswer()">Submit</button>
+    <button onclick="nextStep(1)">Proceed</button>
   </div>
 
-  <!-- Correct Response -->
-  <div id="enter-line">
-    <h1 style="display: block;">"Is thats so, Wali?...Then youz shallest enterz..."</h1>
-    <p><a href="main.html">Enter thy Realm</a></p>
+  <div class="dialogue hidden" id="step2">
+    <h1>"Un traveller, perchance... But from where?"</h1>
+    <input type="text" id="q2" placeholder="From where do you come?">
+    <br>
+    <button onclick="nextStep(2)">Proceed</button>
   </div>
 
-  <!-- Incorrect Response -->
-  <h1 id="rejection-line">"Hmm...Thy words ring false, traveler...Be gone thot...for I never knew you."</h1>
+  <div class="dialogue hidden" id="step3">
+    <h2>"What dost thou seek in these shadowed scrolls?"</h2>
+    <input type="text" id="q3" placeholder='Speak for I have spoken..."'>
+    <br>
+    <button onclick="finalCheck()">Reveal My Destiny</button>
+  </div>
+
+  <div id="enter-line" class="hidden">
+    <h1>"Is thats so?... Then you shallest enterz..."</h1>
+    <p><a href="main.html">✨ Enter the Realm ✨</a></p>
+  </div>
+
+  <div id="rejection-line" class="hidden">
+    "Fie! Your intentions feel... impure."
+  </div>
 
   <script>
-    setTimeout(() => document.getElementById("line1").style.display = "block", 1000);
-    setTimeout(() => document.getElementById("line2").style.display = "block", 3000);
-    setTimeout(() => document.getElementById("line3").style.display = "block", 5000);
-    setTimeout(() => document.getElementById("response-box").style.display = "block", 7000);
-
-    function hideIntroLines() {
-      document.getElementById("line1").style.display = "none";
-      document.getElementById("line2").style.display = "none";
-      document.getElementById("line3").style.display = "none";
+    function nextStep(current) {
+      document.getElementById("step" + current).classList.add("hidden");
+      document.getElementById("step" + (current + 1)).classList.remove("hidden");
     }
 
-    function checkAnswer() {
-      const input = document.getElementById("userInput").value.trim().toLowerCase();
+    function finalCheck() {
+      const answer = document.getElementById("q3").value.trim().toLowerCase();
       const accepted = [
         "refuge",
         "vibez",
         "knownledge",
-        "past"
+        "past",
+        "truth"
       ];
 
-      hideIntroLines();
-      document.getElementById("rejection-line").style.display = "none";
-      document.getElementById("enter-line").style.display = "none";
+      // Hide previous steps
+      document.getElementById("step3").classList.add("hidden");
 
-      if (accepted.includes(input)) {
-        document.getElementById("enter-line").style.display = "block";
+      if (accepted.includes(answer)) {
+        document.getElementById("rejection-line").classList.add("hidden");
+        document.getElementById("enter-line").classList.remove("hidden");
       } else {
-        document.getElementById("rejection-line").style.display = "block";
+        document.getElementById("enter-line").classList.add("hidden");
+        document.getElementById("rejection-line").classList.remove("hidden");
       }
     }
   </script>
+
 </body>
 </html>
