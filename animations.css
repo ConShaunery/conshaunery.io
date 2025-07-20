@@ -1,0 +1,69 @@
+.orbit-container {
+  position: relative;
+  width: 800px;
+  height: 300px;
+  margin: 50px auto;
+}
+
+.orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: -60px center;
+}
+
+.small {
+  width: 32px;
+  height: 32px;
+}
+
+.medium {
+  width: 48px;
+  height: 48px;
+}
+
+.large {
+        width: 82px;
+        height: 82px;
+}
+
+
+.orbit1 {
+  animation: spin1 6s linear infinite;
+}
+.orbit2 {
+  animation: spin2 8s linear infinite reverse;
+}
+.orbit3 {
+  animation: spin3 10s linear infinite;
+}
+.orbit4 {
+  animation: spin4 14s linear infinite reverse;
+}
+
+@keyframes spin1 {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes spin2 {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes spin3 {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes spin4 {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.bobbing {
+  animation: bob 2s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%   { transform: translate(60px, 0); }
+  50%  { transform: translate(60px, -10px); }
+  100% { transform: translate(60px, 0); }
+}
