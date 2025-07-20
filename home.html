@@ -1,138 +1,118 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>conshaunery.com</title>
+<head>
+  <title>conshaunery.com</title>
+  <link rel="stylesheet" href="animations.css">
   <style>
-  body {
-    background-image: url("./gifs/waves.gif");
-    background-size: 90%;
-    background-repeat: repeat;
-    background-color: black; /* fallback color */
-    color: white;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 16px;
-  }
+    body {
+      background-image: url("./gifs/cyberspace.gif");
+      background-size: 50%;
 
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 40px 20px;
-      }
-      h1, h2, h3, h6 {
-        color: white;
-        font-weight: bold;
-        text-align: center;
-      }
-      p {
-        line-height: 1.5;
-        text-align: center;
-      }
-      a {
-        color: #ffffff;
-        text-decoration: none;
-      }
-      a:hover {
-        color: rgb(36, 9, 34);
-      }
-    </style>
-  </head>
-  <body>
-    <div style="text-align: center;">
-  <img src="./gifs/[ ConShaunery.com ].gif" alt="[CS]">
-      <br>
-      <br>
+      background-color: black;
+      color: white;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      margin: 0;
+      padding: 0;
+    }
 
-      <audio autoplay loop>
-        <source src="./sounds/illumination-siddhartha-corsus.mp3" type="audio/mpeg">
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: rgb(36, 9, 34);
+    }
+
+    .portal img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 100%;
+    }
+
+    .orbit-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+    }
+
+    .orbit {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: -50px center;
+      animation: spin 6s linear infinite;
+    }
+
+    @keyframes spin {
+      0%   { transform: rotate(0deg) translateX(80px) rotate(0deg); }
+      100% { transform: rotate(360deg) translateX(80px) rotate(-360deg); }
+    }
+
+    .bobbing {
+      animation: bob 2s ease-in-out infinite;
+    }
+
+    @keyframes bob {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    .orbit img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="./gifs/[ ConShaunery.com ].gif" alt="[CS]">
+    <br><br>
+
+    <audio autoplay loop>
+      <source src="./sounds/illumination-siddhartha-corsus.mp3" type="audio/mpeg">
       Your browser does not support the audio element.
-      </audio>
-      <br>
-      <h6><a href="dreams.html">dreams</a></h6>
-      <br>
-      <h3><a href="pics.html" onmouseover="playSound8()">pics</a></h3>
-      <audio id="audio8" src="./sounds/rainbowsix3.m4a"></audio>
-      <script>
-        function playSound8() {
-          var audio = document.getElementById("audio8");
-          audio.play();
-        }
-      </script>
-      <br>
-      <h3><a href="vids.html" onmouseover="playSound1()">vids</a></h3>
-      <audio id="audio1" src="./sounds/toons.mp3"></audio>
-      <script>
-        function playSound1() {
-          var audio = document.getElementById("audio1");
-          audio.play();
-        }
-      </script>
+    </audio>
 
-      <br>
-      <h3><a href="music.html" onmouseover="playSound4()">music</a></h3>
-      <audio id="audio4" src="./sounds/doot.mp3"></audio>
-      <script>
-        function playSound4() {
-          var audio = document.getElementById("audio4");
-          audio.play();
-        }
-      </script>
-
-      <br>
-      
-      <h3><a href="games.html" onmouseover="playSound2()">games</a></h3>
-      <audio id="audio2" src="./sounds/games_homestar.mp3"></audio>
-      <script>
-        function playSound2() {
-          var audio = document.getElementById("audio2");
-          audio.play();
-        }
-      </script>
-
-      <br>
-      <h3><a href="stream.html"onmouseover="playSound6()">stream</a></h3>
-      <audio id="audio6" src="./sounds/navi_hello.mp3"></audio>
-      <script>
-        function playSound6() {
-          var audio = document.getElementById("audio6");
-          audio.play();
-        }
-      </script>
-      <br>
-      <h3><a href="faq.html" onmouseover="playSound5()">faq</a></h3>
-      <audio id="audio5" src="./sounds/scream17.wav"></audio>
-      <script>
-        function playSound5() {
-          var audio = document.getElementById("audio5");
-          audio.play();
-        }
-      </script>
-      
-      <br>
-      <h3><a href="help.html" onmouseover="playSound3()">help</a></h3> <!-- Added space before "onmouseover" and changed function name to playSound3() -->
-      <audio id="audio3" src="./sounds/shutup2.wav"></audio>
-      <script>
-        function playSound3() { // Changed function name to playSound3()
-          var audio = document.getElementById("audio3");
-          audio.play();
-        }
-      </script>
-      <br><h6><a href="leave.html" onmouseover="playSound7()">leave</a></h6>
-      <audio id="audio7" src="./sounds/IntroWorld_38.wav"></audio>
-      <script>
-        function playSound7() {
-          var audio = document.getElementById("audio7");
-          audio.play();
-        }
-      </script>
-      <br>
-      <br>
-      <br>
-      <div align='center'><a href='https://www.free-website-hit-counter.com'><img src='https://www.free-website-hit-counter.com/c.php?d=9&id=174920&s=76' border='0' alt='Free Website Hit Counter'></a><br / ><small><a href='https://www.free-website-hit-counter.com' title="Free Website Hit Counter"></a></small></div>
+    <!-- Orbiting Icons -->
+    <div class="orbit-container">
+      <div class="orbit"><img class="bobbing" src="./pictures/2.png" alt="icon 1"></div>
+      <div class="orbit" style="animation-delay: 0.5s;"><img class="bobbing" src="./pictures/3.png" alt="icon 2"></div>
+      <div class="orbit" style="animation-delay: 1s;"><img class="bobbing" src="./pictures/4.png" alt="icon 3"></div>
+      <div class="orbit" style="animation-delay: 1.5s;"><img class="bobbing" src="./pictures/5.png" alt="icon 4"></div>
     </div>
-    <footer> <!-- Moved footer inside the container div -->
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 text-center">
-            <p style="font-size: xx-small;"> 2023 &copy; conshaunery.com | All rights reserved ...ᵒʳ ⁿᵒᵗ ᵖˡᵉᵃˢᵉ ᵈᵒⁿᵗ ˢᵘᵉ ᵐᵉ | I don't shit on here so yeah...dont sue....Passion website |  <a href="godzilla.html">godzilla | <a href="language.html">language</a> | <a href="ベイブレード.html">ベイブレード</a> | conshaunery was here <img src="./pictures/conshaun.jpg" alt="logo" width="50" height="50" align="right"></p> <!-- Added "./" before pictures directory to ensure it's correctly referenced -->
-          </div>
-       
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    <!-- Hit Counter -->
+    <div align="center">
+      <a href="https://www.free-website-hit-counter.com">
+        <img src="https://www.free-website-hit-counter.com/c.php?d=9&id=174920&s=76" border="0" alt="Free Website Hit Counter">
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <p style="font-size: xx-small;">
+      2023 &copy; conshaunery.com | All rights reserved ...ᵒʳ ⁿᵒᵗ ᵖˡᵉᵃˢᵉ ᵈᵒⁿᵗ ˢᵘᵉ ᵐᵉ |
+      <a href="godzilla.html">godzilla</a> |
+      <a href="language.html">language</a> |
+      <a href="ベイブレード.html">ベイブレード</a> |
+      conshaunery was here
+      <img src="./pictures/conshaun.jpg" alt="logo" width="50" height="50" align="right">
+    </p>
+  </footer>
+</body>
+</html>
