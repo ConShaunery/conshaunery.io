@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>conshaunery.com</title>
   <style>
     body {
@@ -11,75 +12,40 @@
       text-align: center;
       padding: 40px 20px;
     }
-
-    .dialogue {
-      margin-top: 20px;
-    }
-
+    .dialogue { margin-top: 20px; }
     input[type="text"] {
-      padding: 10px;
-      font-size: 18px;
-      width: 80%;
-      max-width: 400px;
-      border: 2px solid #555;
-      border-radius: 5px;
-      background-color: #222;
-      color: white;
-      text-align: center;
-      margin-bottom: 10px;
+      padding: 10px; font-size: 18px;
+      width: 80%; max-width: 400px;
+      border: 2px solid #555; border-radius: 5px;
+      background-color: #222; color: white;
+      text-align: center; margin-bottom: 10px;
     }
-
     button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: purple;
-      color: white;
-      border: none;
-      cursor: pointer;
-      margin: 10px;
+      padding: 10px 20px; font-size: 16px;
+      background-color: purple; color: white;
+      border: none; cursor: pointer; margin: 10px;
     }
-
-    button:hover {
-      background-color: orange;
-      color: black;
+    button:hover { background-color: orange; color: black; }
+    .hidden { display: none; }
+    #name-reaction, #question-response {
+      font-style: italic; margin-top: 10px;
     }
-
-    .hidden {
-      display: none;
-    }
-
-    #name-reaction {
-      font-style: italic;
-      margin-top: 10px;
-    }
-
     #enter-line a {
-      color: orange;
-      font-size: 18px;
-      text-decoration: underline;
+      color: orange; font-size: 18px; text-decoration: underline;
     }
-
-    #enter-line a:hover {
-      color: white;
-    }
-
+    #enter-line a:hover { color: white; }
     #rejection-line {
-      color: crimson;
-      font-size: 20px;
-      font-weight: bold;
-      margin-top: 20px;
+      color: crimson; font-size: 20px;
+      font-weight: bold; margin-top: 20px;
     }
-
-    #rejection-line button {
-      margin-top: 10px;
-    }
+    #rejection-line button { margin-top: 10px; }
   </style>
 </head>
 <body>
 
   <img src="./gifs/moon_face.gif" alt="logo" width="500">
 
-  <!-- Step 1 -->
+  <!-- Step 1: Name -->
   <div class="dialogue" id="step1">
     <h1 id="initial-greeting">"Oh... And whomest could dis be?"</h1>
     <input type="text" id="q1" placeholder="Your name?">
@@ -88,107 +54,140 @@
     <button onclick="nextStep(1)">Proceed</button>
   </div>
 
-  <!-- Step 2 -->
+  <!-- Step 2: Origin -->
   <div class="dialogue hidden" id="step2">
-    <h1>"Hmm...Un traveller, perchance... But from where?"</h1>
+    <h1>"Hmm... Un traveller, perchance... But from where?"</h1>
     <input type="text" id="q2" placeholder="From where do you come?">
     <br>
     <button onclick="nextStep(2)">Proceed</button>
   </div>
 
-  <!-- Step 3 -->
+  <!-- Step 3: Q&A -->
   <div class="dialogue hidden" id="step3">
+    <h1>"Ask me any question of this realm, traveler."</h1>
+    <input type="text" id="q3" placeholder="Your question...">
+    <p id="question-response" class="hidden"></p>
+    <br>
+    <button onclick="questionResponse()">Ask</button>
+    <button id="to-final" class="hidden" onclick="toFinal()">Proceed to Final Question</button>
+  </div>
+
+  <!-- Step 4: Final Question -->
+  <div class="dialogue hidden" id="step4">
     <h2>"Oh?....What dost thou seek in these shadowed cyberrealm? Hmm?"</h2>
-    <input type="text" id="q3" placeholder='Speak! Wali...for I have spoken...'>
+    <input type="text" id="q4" placeholder='Speak! Wali...for I have spoken...'>
     <br>
     <button onclick="finalCheck()">Reveal My Destiny</button>
   </div>
 
-  <!-- Entry line if correct -->
+  <!-- Entry if correct -->
   <div id="enter-line" class="hidden">
     <h1>"Is that so?... Then you shallest enterz..."</h1>
     <p><a href="main.html">✨ Enter the Realm ✨</a></p>
   </div>
 
-  <!-- Rejection line -->
+  <!-- Rejection -->
   <div id="rejection-line" class="hidden">
     <p>"Fie! Your intentions feel... impure. Be gone you thot! For I...I never you...."</p>
-    <button onclick="redirectToBrave()">Leave thy realm...Or return with the right answers...</button>
+    <button onclick="redirectToBrave()">Leave thy realm… or return with the right answers…</button>
   </div>
 
-  <!-- Audio Setup -->
+  <!-- Background Music -->
   <audio id="bg-music" loop>
     <source src="./sounds/sunset.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
-  <!-- Script -->
   <script>
+    // Autoplay once user interacts
     function startAudio() {
-      const audio = document.getElementById("bg-music");
       if (!window.audioStarted) {
-        audio.play().catch(() => {}); // Silent catch for browser autoplay block
+        const audio = document.getElementById("bg-music");
+        audio.play().catch(()=>{});
         window.audioStarted = true;
       }
     }
-document.addEventListener("DOMContentLoaded", () => {
-  const wasRejected = localStorage.getItem("rejectedVisitor");
-  if (wasRejected === "true") {
-    document.getElementById("initial-greeting").textContent = '"Oh... so you\'ve returned..."';
-  }
-});
 
-    function nextStep(current) {
-      if (current === 1) {
+    // Welcome back message after rejection
+    document.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("rejectedVisitor") === "true") {
+        document.getElementById("initial-greeting")
+                .textContent = '"Oh... so you\'ve returned..."';
+      }
+    });
+
+    // Step transitions for steps 1 & 2
+    function nextStep(step) {
+      startAudio();
+      if (step === 1) {
         const name = document.getElementById("q1").value.trim();
-        const reaction = document.getElementById("name-reaction");
-
-        if (name.length === 0) {
-          reaction.textContent = "A name must be spoken...";
-          reaction.classList.remove("hidden");
+        const react = document.getElementById("name-reaction");
+        if (!name) {
+          react.textContent = "A name must be spoken...";
+          react.classList.remove("hidden");
           return;
         }
-
-        reaction.textContent = `"${name}"... A name most curious...`;
-        reaction.classList.remove("hidden");
-
-        // Delay before showing next step
+        react.textContent = `"${name}"... A name most curious...`;
+        react.classList.remove("hidden");
         setTimeout(() => {
           document.getElementById("step1").classList.add("hidden");
           document.getElementById("step2").classList.remove("hidden");
-        }, 2000);
+        }, 1500);
       } else {
-        document.getElementById("step" + current).classList.add("hidden");
-        document.getElementById("step" + (current + 1)).classList.remove("hidden");
+        // after step2 → show Q&A
+        document.getElementById("step2").classList.add("hidden");
+        document.getElementById("step3").classList.remove("hidden");
       }
-
-      startAudio();
     }
 
-    function finalCheck() {
-      const answer = document.getElementById("q3").value.trim().toLowerCase();
-      const accepted = ["refuge", "vibez", "knownledge", "past", "truth"];
+    // Q&A logic
+    function questionResponse() {
+      startAudio();
+      const q = document.getElementById("q3").value.trim().toLowerCase();
+      const resp = document.getElementById("question-response");
+      let answer;
+      if (q.includes("place")) {
+        answer = "This is a place of the past...Now that those destroyed our future....";
+      } else if (q.includes("who")) {
+        answer = "I am the gatekeeper of this cyberrealm, ever watchful. Sha'za Zuk Kysion the name.";
+      } else if (q.includes("help")) {
+        answer = "Ask of origins, purpose, or secrets—then press ‘Proceed’.";
+      } else if (q.includes("music")) {
+        answer = "The melody you hear stems from the sunset echoes of old nets.";
+      } else {
+        answer = "I know not that. Speak of the realm’s lore or proceed on.";
+      }
+      resp.textContent = answer;
+      resp.classList.remove("hidden");
+      // show proceed-to-final button
+      document.getElementById("to-final").classList.remove("hidden");
+    }
 
+    function toFinal() {
+      startAudio();
       document.getElementById("step3").classList.add("hidden");
+      document.getElementById("step4").classList.remove("hidden");
+    }
 
-      if (accepted.includes(answer)) {
+    // Final acceptance/rejection
+    function finalCheck() {
+      startAudio();
+      const ans = document.getElementById("q4").value.trim().toLowerCase();
+      const allowed = ["refuge","vibez","knownledge","past","truth"];
+
+      document.getElementById("step4").classList.add("hidden");
+
+      if (allowed.includes(ans)) {
+        // accepted
+        localStorage.removeItem("rejectedVisitor");
         document.getElementById("rejection-line").classList.add("hidden");
         document.getElementById("enter-line").classList.remove("hidden");
       } else {
+        // rejected
+        localStorage.setItem("rejectedVisitor", "true");
         document.getElementById("enter-line").classList.add("hidden");
         document.getElementById("rejection-line").classList.remove("hidden");
       }
-
-      if (accepted.includes(answer)) {
-  localStorage.removeItem("rejectedVisitor"); // Clear flag if accepted
-  document.getElementById("rejection-line").classList.add("hidden");
-  document.getElementById("enter-line").classList.remove("hidden");
-} else {
-  localStorage.setItem("rejectedVisitor", "true"); // Mark them as rejected
-  document.getElementById("enter-line").classList.add("hidden");
-  document.getElementById("rejection-line").classList.remove("hidden");
-}
-
     }
 
     function redirectToBrave() {
