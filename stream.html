@@ -3,59 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <title>conshaunery.com / stream</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <style>
-    /* Base reset */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: #000 url("./gifs/palm.gif") repeat;
       background-size: 90%;
       color: #fff;
       font-family: Helvetica, Arial, sans-serif;
-      font-size: 16px;
-      line-height: 1.4;
+      margin:0; padding:40px 20px;
+      text-align:center;
     }
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 40px 20px;
-      text-align: center;
-    }
-    header h1 {
-      font-size: 3em;
-      margin-bottom: 0.2em;
-    }
-    nav a {
-      margin: 0 10px;
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    nav a:hover {
-      color: orange;
-    }
-
-    audio {
-      display: block;
-      margin: 20px auto;
-    }
-
-    main {
-      margin-top: 40px;
-    }
-
-    section {
-      margin-bottom: 60px;
-    }
-
-    section h2, section h3 {
-      margin-bottom: 20px;
-    }
-
-    /* Responsive video */
     .video-wrapper {
       max-width: 1000px;
-      margin: 0 auto 40px;
+      margin: 40px auto;
     }
     .video-wrapper video {
       width: 100%;
@@ -64,128 +24,25 @@
       border-radius: 8px;
       box-shadow: 0 0 12px rgba(0,0,0,0.5);
     }
-
-    /* Social links */
-    .social-links {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
-      margin-bottom: 60px;
-    }
-    .social-links a {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #fff;
-      text-decoration: none;
-      font-size: 0.9em;
-    }
-    .social-links a img {
-      width: 50px;
-      height: 50px;
-      margin-bottom: 8px;
-      filter: drop-shadow(0 0 4px rgba(0,0,0,0.5));
-    }
-    .social-links a:hover {
-      color: orange;
-    }
-
-    /* Dagoth section */
-    .dagoth {
-      display: block;
-      margin: 0 auto 20px;
-      width: 200px;
-      height: 200px;
-    }
-    .dagoth + p {
-      font-size: 0.9em;
-      margin-bottom: 60px;
-    }
-
-    /* Footer */
-    footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.8em;
-      opacity: 0.75;
-    }
-    footer img.logo {
-      width: 50px;
-      height: 50px;
-    }
-
-    /* Small screens tweak */
-    @media (max-width: 600px) {
-      nav a { font-size: 0.9em; }
-      header h1 { font-size: 2em; }
-      .social-links { gap: 20px; }
-    }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <header>
-      <!-- Autoplaying audio (muted autoplay may be blocked until user interaction) -->
-      <audio id="bg-music" autoplay loop>
-        <source src="./sounds/xb_demos.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
+  <h1>[CS] / Stream</h1>
 
-      <h1>[CS]</h1>
+  <audio id="bg-music" autoplay loop muted>
+    <source src="./sounds/xb_demos.ogg" type="audio/mpeg">
+  </audio>
 
-      <nav>
-        <a href="home.html">home</a>
-        <a href="pics.html">pics</a>
-        <a href="vids.html">vids</a>
-        <a href="music.html">music</a>
-        <a href="stream.html">stream</a>
-        <a href="faq.html">faq</a>
-        <a href="help.html">help</a>
-      </nav>
-    </header>
-
-    <main>
-      <!-- Section: Stream Preview -->
-      <section>
-        <h2>Here’s a sneak peek of my streams!</h2>
-        <div class="video-wrapper">
-          <video controls>
-            <source src="./vids/stream.mp4" type="video/mp4">
-            <!-- fallback -->
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      </section>
-
-      <!-- Section: Social Links -->
-      <section>
-        <h3>Catch me live on dem sticks</h3>
-        <div class="social-links">
-          <a href="https://twitch.tv/ConShaunery" target="_blank" rel="noopener">
-            <img src="./pictures/twitch.png" alt="Twitch">
-            Twitch @ ConShaunery
-          </a>
-          <a href="https://kick.com/ConShaunery" target="_blank" rel="noopener">
-            <img src="./pictures/kick.png" alt="Kick">
-            Kick @ ConShaunery
-          </a>
-        </div>
-      </section>
-
-      <!-- Section: Dagoth -->
-      <section>
-        <img src="./pictures/dagoth.gif" alt="Dagoth" class="dagoth">
-        <p>Cum Nerevar, friend or traitor, cum.</p>
-      </section>
-    </main>
-
-    <footer>
-      <p>conshaunery was here.</p>
-      <img src="./pictures/conshaun.jpg" alt="ConShaun Logo" class="logo">
-    </footer>
+  <div class="video-wrapper">
+    <video
+      controls
+      preload="metadata"
+      poster="./gifs/palm.gif"
+      src="./vids/stream.mp4"
+    >
+      Sorry, your browser doesn’t support embedded videos.
+    </video>
   </div>
 
 </body>
