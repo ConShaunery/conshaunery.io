@@ -1,244 +1,216 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>CS // Retro Terminal</title>
-<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <title>CS // Retro Terminal</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 
-<!-- Google Fonts for optional choices -->
-<link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <!-- Google Fonts for optional choices -->
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
 
-<style>
-/* ===== Pixel / Retro Font Faces (LOCAL) ===== */
-@font-face {
-  font-family: 'VGA8';
-  src: url('./fonts/Web437_IBM_3270pc.woff2') format('woff2'),
-       url('./fonts/Web437_IBM_3270pc.woff') format('woff');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'VGA8BIOS';
-  src: url('./fonts/Web437_IBM_BIOS.woff2') format('woff2'),
-       url('./fonts/Web437_IBM_BIOS.woff') format('woff');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'VGA8CGA';
-  src: url('./fonts/Web437_IBM_CGA.woff2') format('woff2'),
-       url('./fonts/Web437_IBM_CGA.woff') format('woff');
-  font-display: swap;
-}
+  <style>
+  /* ===== Pixel / Retro Font Faces (LOCAL) ===== */
+  @font-face {
+    font-family: 'VGA8';
+    src: url('./fonts/Web437_IBM_3270pc.woff2') format('woff2'),
+         url('./fonts/Web437_IBM_3270pc.woff') format('woff');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'VGA8BIOS';
+    src: url('./fonts/Web437_IBM_BIOS.woff2') format('woff2'),
+         url('./fonts/Web437_IBM_BIOS.woff') format('woff');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'VGA8CGA';
+    src: url('./fonts/Web437_IBM_CGA.woff2') format('woff2'),
+         url('./fonts/Web437_IBM_CGA.woff') format('woff');
+    font-display: swap;
+  }
 
-/* ===== Root Variables ===== */
-:root {
-  --bg:#000;
-  --fg:#0f0;
-  --accent:#18ff18;
-  --dim:#0b640b;
-  --error:#f33;
-  --warn:#ff0;
+  /* ===== Root Variables (orange theme) ===== */
+  :root {
+    --bg: #000;
+    --fg: #ffa500;               /* orange text */
+    --accent: #ffa500;           /* orange highlights */
+    --dim: rgba(255,165,0,0.3);  /* dim orange */
+    --warn: #ffa500;
+    --error: #f33;
+    --font: 'VGA8', monospace;
+    --crt-glow-strength: 0.65;
+    --crt-scanline-opacity: 0.15;
+    --crt-scanline-size: 2px;
+    --crt-flicker-min: 0.65;
+    --crt-flicker-max: 0.9;
+    --crt-vignette-opacity: 0.35;
+  }
 
-  /* Default font (will be overridden by JS from prefs) */
-  --font:'VGA8', monospace;
+  body {
+    background: radial-gradient(circle at 50% 50%, #020702, #000 70%);
+    color: var(--fg);
+    font-family: var(--font);
+    font-size: 18px;
+    margin: 0; padding: 0;
+    height: 100vh;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    -webkit-font-smoothing: none;
+    text-rendering: optimizeSpeed;
+  }
 
-  /* CRT tuning knobs */
-  --crt-glow-strength: 0.65;
-  --crt-scanline-opacity: 0.15;
-  --crt-scanline-size: 2px;
-  --crt-flicker-min: 0.65;
-  --crt-flicker-max: 0.9;
-  --crt-vignette-opacity: 0.35;
-}
+  .crt-frame {
+    position: relative; flex: 1; margin: 10px;
+    border: 3px solid #662200;
+    border-radius: 14px;
+    background: #000;
+    box-shadow:
+      0 0 10px rgba(255,165,0,0.3),
+      0 0 35px rgba(255,165,0,0.12),
+      inset 0 0 18px rgba(255,165,0,0.15),
+      inset 0 0 60px rgba(255,165,0,0.05);
+    overflow: hidden;
+  }
 
-body {
-  background: radial-gradient(circle at 50% 50%, #020702, #000 70%);
-  color: var(--fg);
-  font-family: var(--font);
-  font-size:18px; /* bigger for pixel clarity */
-  margin:0;
-  padding:0;
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-  -webkit-font-smoothing:none;
-  text-rendering:optimizeSpeed;
-}
+  .crt-inner {
+    position: absolute; inset: 0; padding-top: 34px;
+    display: flex; flex-direction: column;
+    filter: contrast(1.05) saturate(1.15);
+    transform: perspective(1400px) scale(1.0001) translateZ(0);
+  }
 
-.crt-frame {
-  position:relative;
-  flex:1;
-  margin:10px;
-  border:3px solid #062a06;
-  border-radius:14px;
-  box-shadow:
-    0 0 10px rgba(0,255,0,0.3),
-    0 0 35px rgba(0,255,30,0.12),
-    inset 0 0 18px rgba(0,255,0,0.15),
-    inset 0 0 60px rgba(0,255,0,0.05);
-  overflow:hidden;
-  background:#000;
-}
+  /* Top bar */
+  #topbar {
+    position: absolute; top: 0; left: 0; right: 0;
+    background: linear-gradient(to bottom, rgba(0,40,0,0.9), rgba(0,0,0,0));
+    padding: 4px 10px 6px; font-size: 12px;
+    display: flex; justify-content: space-between;
+    color: var(--dim); z-index: 10;
+    font-family: var(--font);
+  }
+  #topbar span { cursor: pointer; }
+  #topbar span:hover { color: var(--accent); text-decoration: underline; }
 
-.crt-inner {
-  position:absolute;
-  inset:0;
-  padding-top:34px;
-  display:flex;
-  flex-direction:column;
-  filter:contrast(1.05) saturate(1.15);
-  transform:perspective(1400px) scale(1.0001) translateZ(0);
-}
+  /* Terminal pane */
+  #terminal {
+    flex: 1; padding: 16px 14px 90px;
+    overflow-y: auto; white-space: pre-wrap; line-height: 1.3;
+    scrollbar-width: thin;
+  }
+  #terminal::-webkit-scrollbar { width: 8px; }
+  #terminal::-webkit-scrollbar-track { background: #050505; }
+  #terminal::-webkit-scrollbar-thumb { background: rgba(255,165,0,0.5); }
 
-/* Top bar */
-#topbar {
-  position:absolute;
-  top:0; left:0; right:0;
-  background:linear-gradient(to bottom, rgba(0,40,0,0.9), rgba(0,0,0,0));
-  padding:4px 10px 6px;
-  font-size:12px;
-  display:flex;
-  justify-content:space-between;
-  color:var(--dim);
-  z-index:10;
-  font-family: var(--font);
-}
-#topbar span { cursor:pointer; }
-#topbar span:hover { color:var(--accent); text-decoration:underline; }
+  #status {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.92), rgba(0,0,0,0.6));
+    padding: 10px 12px; font-size: 14px;
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    z-index: 5;
+  }
 
-#terminal {
-  flex:1;
-  padding:16px 14px 90px;
-  overflow-y:auto;
-  white-space:pre-wrap;
-  line-height:1.3;
-  scrollbar-width:thin;
-}
-#terminal::-webkit-scrollbar { width:8px; }
-#terminal::-webkit-scrollbar-track { background:#050505; }
-#terminal::-webkit-scrollbar-thumb { background:#0f380f; }
+  #prompt-line { display: flex; align-items: center; width: 100%; }
+  #ps1 {
+    color: var(--accent); margin-right: 6px;
+    text-shadow: 0 0 4px rgba(255,165,0,0.7);
+  }
+  #input {
+    flex: 1; background: var(--bg); color: var(--fg);
+    border: 1px solid var(--accent); font-family: inherit; font-size: 18px;
+    padding: 6px 8px; outline: none; caret-color: var(--accent);
+    box-shadow: 0 0 6px rgba(255,165,0,0.35);
+  }
+  #input:focus { box-shadow: 0 0 10px rgba(255,165,0,0.7); }
 
-#status {
-  position:absolute;
-  bottom:0; left:0; right:0;
-  background:linear-gradient(to top, rgba(0,0,0,0.92), rgba(0,0,0,0.6));
-  padding:10px 12px;
-  font-size:14px;
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  align-items:center;
-  z-index:5;
-}
+  /* Text effects */
+  .line {
+    animation: fadein .15s ease;
+    text-shadow: 0 0 6px rgba(255,165,0,var(--crt-glow-strength));
+  }
+  @keyframes fadein { from { opacity:0 } to { opacity:1 } }
 
-#prompt-line { display:flex; align-items:center; width:100%; }
-#ps1 { color:var(--accent); margin-right:6px; text-shadow:0 0 4px rgba(0,255,0,0.7); }
-#input {
-  flex:1;
-  background:#000;
-  border:1px solid var(--accent);
-  color:var(--fg);
-  font-family:inherit;
-  font-size:18px;
-  padding:6px 8px;
-  outline:none;
-  caret-color: var(--accent);
-  box-shadow:0 0 6px rgba(0,255,0,0.35);
-}
-#input:focus { box-shadow:0 0 10px rgba(0,255,0,0.7); }
+  .dim   { color: var(--dim);   text-shadow: none; }
+  .warn  { color: var(--warn);  text-shadow: none; }
+  .error { color: var(--error); text-shadow: none; }
+  .ok    { color: var(--accent); }
 
-.line { animation: fadein .15s ease; text-shadow: 0 0 6px rgba(0,255,0,var(--crt-glow-strength)); }
-@keyframes fadein { from { opacity:0 } to { opacity:1 } }
+  .progressbar {
+    width: 100%; height: 12px; position: relative; margin: 4px 0 6px;
+    border: 1px solid var(--accent);
+    box-shadow: 0 0 6px rgba(255,165,0,0.6);
+  }
+  .progressbar span {
+    display: block; height: 100%; width: 0; background: var(--accent);
+    box-shadow: 0 0 8px rgba(255,165,0,0.9);
+    animation: grow 3.5s linear forwards;
+  }
+  @keyframes grow { to { width: 100%; } }
 
-.dim { color:var(--dim); text-shadow:none; }
-.warn { color:var(--warn); text-shadow:0 0 6px rgba(255,255,0,0.4); }
-.error{ color:var(--error); text-shadow:0 0 6px rgba(255,0,0,0.6); }
-.ok   { color:var(--accent); }
-
-.progressbar {
-  width:100%; border:1px solid var(--accent);
-  height:12px; position:relative; margin:4px 0 6px;
-  box-shadow:0 0 6px rgba(0,255,0,0.6);
-}
-.progressbar span {
-  display:block; height:100%; width:0; background:var(--accent);
-  animation: grow 3.5s linear forwards;
-  box-shadow:0 0 8px rgba(0,255,0,0.9);
-}
-@keyframes grow { to { width:100%; } }
-
-/* Overlays */
-.scanlines, .vignette, .sweep {
-  pointer-events:none;
-  position:absolute;
-  inset:0;
-  z-index:20;
-}
-.scanlines {
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      rgba(0,0,0,var(--crt-scanline-opacity)) 0px,
-      rgba(0,0,0,var(--crt-scanline-opacity)) var(--crt-scanline-size),
-      rgba(0,0,0,0) calc(var(--crt-scanline-size) * 2)
+  /* Overlays */
+  .scanlines, .vignette, .sweep {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  .scanlines {
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(255,165,0,var(--crt-scanline-opacity)) 0,
+        rgba(255,165,0,var(--crt-scanline-opacity)) var(--crt-scanline-size),
+        rgba(255,165,0,0) calc(var(--crt-scanline-size)*2)
+      );
+    mix-blend-mode: multiply;
+    animation: scanFlicker 4s linear infinite;
+    z-index: 20;
+  }
+  @keyframes scanFlicker { 0%,100%{opacity:0.9;}50%{opacity:0.75;} }
+  .vignette {
+    background:
+      radial-gradient(circle at center,
+        rgba(0,0,0,0) 55%,
+        rgba(0,0,0,var(--crt-vignette-opacity)) 100%
+      );
+    mix-blend-mode: multiply; z-index: 21;
+  }
+  .sweep::before {
+    content: ''; position: absolute;
+    left:0; right:0; top:-40%; height:40%;
+    background: linear-gradient(to bottom,
+      rgba(255,255,255,0.08),
+      rgba(255,255,255,0) 80%
     );
-  mix-blend-mode:multiply;
-  animation: scanFlicker 4s linear infinite;
-}
-@keyframes scanFlicker {
-  0%,100% { opacity:0.9; }
-  50% { opacity:0.75; }
-}
-.vignette {
-  background:
-    radial-gradient(circle at center,
-      rgba(0,0,0,0) 55%,
-      rgba(0,0,0,var(--crt-vignette-opacity)) 100%);
-  mix-blend-mode:multiply;
-}
-.sweep::before {
-  content:'';
-  position:absolute;
-  left:0; right:0;
-  top:-40%;
-  height:40%;
-  background:linear-gradient(to bottom,
-    rgba(255,255,255,0.08),
-    rgba(255,255,255,0) 80%);
-  animation: sweep 6.5s linear infinite;
-  filter:blur(2px);
-}
-@keyframes sweep {
-  0% { transform: translateY(0); opacity:0.3; }
-  75% { transform: translateY(220%); opacity:0; }
-  100% { transform: translateY(220%); opacity:0; }
-}
+    animation: sweep 6.5s linear infinite;
+    filter: blur(2px); z-index: 22;
+  }
+  @keyframes sweep {
+    0%   { transform: translateY(0);   opacity:0.3; }
+    75%  { transform: translateY(220%); opacity:0; }
+    100% { transform: translateY(220%); opacity:0; }
+  }
 
-.crt-frame.crt-active {
-  animation: frameFlicker 2.7s steps(60,end) infinite;
-}
-@keyframes frameFlicker {
-  0% { filter:brightness(var(--crt-flicker-min)); }
-  50% { filter:brightness(var(--crt-flicker-max)); }
-  100% { filter:brightness(var(--crt-flicker-min)); }
-}
+  .crt-frame.crt-active {
+      animation: frameFlicker 2.7s steps(60,end) infinite;
+  }
+  @keyframes frameFlicker {
+    0%   { filter: brightness(var(--crt-flicker-min)); }
+    50%  { filter: brightness(var(--crt-flicker-max)); }
+    100% { filter: brightness(var(--crt-flicker-min)); }
+  }
 
-.theme-amber { --bg:#000; --fg:#ffcf7d; --accent:#ffa200; --dim:#995b10; }
-.theme-magenta { --bg:#120012; --fg:#ff9bff; --accent:#ff44ff; --dim:#b646b6; }
-.theme-light { --bg:#f5f5f5; --fg:#222; --accent:#0050b3; --dim:#666; --error:#b30000; --warn:#bb9100; }
+  /* Themes */
+  .theme-phosphor { /* same orange palette */ }
+  .theme-amber    { --fg:#ffcf7d; --accent:#ffa200; --dim:#995b10; }
+  .theme-magenta  { --fg:#ff9bff; --accent:#ff44ff; --dim:#b646b6; }
+  .theme-light    { --bg:#f5f5f5; --fg:#222; --accent:#0050b3; --dim:#666; }
 
-.blink { animation: blink 1s steps(2,start) infinite; }
-@keyframes blink { 50% { opacity:0; } }
-
-.no-crt .scanlines,
-.no-crt .vignette,
-.no-crt .sweep { display:none; }
-.no-crt.crt-frame {
-  animation:none;
-  box-shadow:0 0 6px rgba(0,255,0,0.15), inset 0 0 8px rgba(0,255,0,0.05);
-}
-</style>
+  /* Orbit + bobbing (unchanged) */
+  .orbit-container { position: relative; width:100px; height:100px; margin:0 auto; }
+  .orbit { position:absolute; top:0; left:50%; transform-origin:0 50px; animation:spin 4s linear infinite; }
+  .bobbing { animation:bob 2s infinite ease-in-out; }
+  @keyframes spin { 0%{transform:rotate(0) translateX(50px);}100%{transform:rotate(360deg) translateX(50px) rotate(-360deg);} }
+  @keyframes bob { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+  </style>
 </head>
+
 <body class="theme-phosphor">
   <div class="crt-frame crt-active" id="crtFrame">
     <div class="scanlines"></div>
@@ -247,11 +219,11 @@ body {
 
     <div class="crt-inner">
       <div id="topbar">
-        <div>CS TERMINAL v0.3</div>
+        <div>CS TERMINAL v0.3</div>
         <div>
-          <span data-theme="phosphor">phosphor</span> •
-          <span data-theme="amber">amber</span> •
-          <span data-theme="magenta">magenta</span> •
+          <span data-theme="phosphor">phosphor</span> • 
+          <span data-theme="amber">amber</span> • 
+          <span data-theme="magenta">magenta</span> • 
           <span data-theme="light">light</span>
         </div>
       </div>
@@ -267,267 +239,268 @@ body {
     </div>
   </div>
 
-      <audio autoplay loop>
-        <source src="./sounds/demos.mp3" type="audio/mpeg">
-      Your browser does not support the audio element.
-      </audio>  
-<script>
-(() => {
-  const term = document.getElementById('terminal');
-  const input = document.getElementById('input');
-  const ps1 = document.getElementById('ps1');
-  const crtFrame = document.getElementById('crtFrame');
+  <!-- background audio (give it an id) -->
+  <audio id="bg-audio" autoplay loop>
+    <source src="./sounds/demos.mp3" type="audio/mpeg">
+  </audio>
 
-  const storageKeyVars = 'cs_terminal_vars_v1';
-  const storageKeyPrefs = 'cs_terminal_prefs_v1';
+  <script>
+  (() => {
+    const term      = document.getElementById('terminal');
+    const input     = document.getElementById('input');
+    const ps1       = document.getElementById('ps1');
+    const crtFrame  = document.getElementById('crtFrame');
+    const bgAudio   = document.getElementById('bg-audio');
+    const VARS      = JSON.parse(localStorage.getItem('cs_terminal_vars_v1')  || '{}');
+    const PREFS     = JSON.parse(localStorage.getItem('cs_terminal_prefs_v1')|| '{}');
+    let history     = [], historyIndex = -1;
+    let typewriter  = PREFS.typewriter || false;
+    let username    = VARS.username   || 'guest';
+    let crtOn       = PREFS.crt !== false;
 
-  let VARS = load(storageKeyVars) || {};
-  let PREFS = load(storageKeyPrefs) || {};
-  let history = [];
-  let historyIndex = -1;
-  let typewriterActive = PREFS.typewriter || false;
-  let username = VARS.username || 'guest';
-  let crtOn = PREFS.crt !== false; // default ON
-
-  // Apply saved font choice
-  if (PREFS.fontFamily) {
-    document.documentElement.style.setProperty('--font', PREFS.fontFamily);
-  }
-
-  applyCRTState();
-  updatePrompt();
-  banner();
-
-  function load(key){ try { return JSON.parse(localStorage.getItem(key)); } catch(e){ return null; } }
-  function save(key,val){ localStorage.setItem(key, JSON.stringify(val)); }
-  function updatePrompt() { ps1.textContent = (username || 'guest') + "@cs:~$"; }
-
-  function banner() {
-    writeLine("/*==============================================*/", 'dim');
-    writeLine("  CONSHAUNERY RETRO TERMINAL + CRT MODE", 'ok');
-    writeLine("  Type 'help' for commands. 'font list' to view fonts.", 'dim');
-    writeLine("/*==============================================*/\n", 'dim');
-    if (PREFS.showMotd !== false) {
-      writeLine("MOTD: Welcome back, wanderer of the cyberverse.\n(Type 'motd off' to hide this banner.)", 'warn');
+    if (PREFS.fontFamily) {
+      document.documentElement.style.setProperty('--font', PREFS.fontFamily);
     }
-  }
 
-  function writeLine(txt='', cls='', options={}) {
-    const line = document.createElement('div');
-    line.className = 'line ' + (cls||'');
-    if (typewriterActive && !options.instant) {
-      typeWrite(line, txt, 0);
-    } else {
-      line.textContent = txt;
+    applyCRTState();
+    updatePrompt();
+    showBanner();
+
+    function save(key,val){
+      localStorage.setItem(key, JSON.stringify(val));
     }
-    term.appendChild(line);
-    term.scrollTop = term.scrollHeight;
-  }
-
-  function typeWrite(node, text, i) {
-    const chunk = 2 + Math.floor(Math.random()*3);
-    node.textContent = text.slice(0, i + chunk);
-    if (i + chunk < text.length) {
-      setTimeout(()=>typeWrite(node,text,i+chunk), 12 + Math.random()*40);
+    function updatePrompt(){
+      ps1.textContent = username + "@cs:~$";
     }
-  }
-
-  function applyCRTState() {
-    if (crtOn) {
-      crtFrame.classList.remove('no-crt');
-      crtFrame.classList.add('crt-active');
-    } else {
-      crtFrame.classList.add('no-crt');
-      crtFrame.classList.remove('crt-active');
-    }
-  }
-
-  /* ======================
-     COMMANDS
-     ====================== */
-  const COMMANDS = {
-    help() {
-      writeLine("Commands:");
-      writeLine(Object.keys(COMMANDS).sort().join('  '));
-      writeLine("\nHighlights: font list | font <name> | theme <name> | crt on/off | typewriter on/off");
-    },
-    about(){ writeLine("Retro terminal sandbox with CRT overlay + multi-font switching."); },
-    clear(){ term.innerHTML=''; },
-    cls(){ this.clear(); },
-    time(){ writeLine(new Date().toString()); },
-    echo(a){ writeLine(a.join(' ')); },
-    whoami(){ writeLine(username); },
-    set(a){
-      if (a.length<2){ writeLine("Usage: set <name> <value>",'warn'); return; }
-      const k=a.shift(); const v=a.join(' ');
-      VARS[k]=v; if (k==='username'){ username=v; updatePrompt(); }
-      save(storageKeyVars,VARS);
-      writeLine(`Set ${k}=${v}`,'ok');
-    },
-    get(a){
-      if(!a.length){ writeLine("Usage: get <name>",'warn'); return; }
-      const k=a[0]; (k in VARS)?writeLine(`${k}=${VARS[k]}`):writeLine("No such variable.",'warn');
-    },
-    listvars(){
-      const keys=Object.keys(VARS);
-      if(!keys.length){ writeLine("No variables set."); return; }
-      keys.forEach(k=>writeLine(`${k}=${VARS[k]}`));
-    },
-    resetvars(){
-      VARS={}; save(storageKeyVars,VARS); writeLine("All variables cleared.",'ok');
-    },
-    motd(a){
-      if(!a.length){ writeLine("motd is "+(PREFS.showMotd===false?"OFF":"ON")); return; }
-      if(a[0]==='off'){ PREFS.showMotd=false; save(storageKeyPrefs,PREFS); writeLine("MOTD disabled."); }
-      else if(a[0]==='on'){ PREFS.showMotd=true; save(storageKeyPrefs,PREFS); writeLine("MOTD enabled."); }
-      else writeLine("Usage: motd on|off",'warn');
-    },
-    typewriter(a){
-      if(!a.length){ writeLine("typewriter is "+(typewriterActive?"ON":"OFF")); return; }
-      if(a[0]==='on'){ typewriterActive=true; PREFS.typewriter=true; save(storageKeyPrefs,PREFS); writeLine("Typewriter ON"); }
-      else if(a[0]==='off'){ typewriterActive=false; PREFS.typewriter=false; save(storageKeyPrefs,PREFS); writeLine("Typewriter OFF"); }
-      else writeLine("Usage: typewriter on|off",'warn');
-    },
-    theme(a){
-      if(!a.length){ writeLine("Themes: phosphor, amber, magenta, light"); return; }
-      const t = a[0].toLowerCase();
-      document.body.classList.remove('theme-amber','theme-phosphor','theme-magenta','theme-light');
-      if(t==='amber') document.body.classList.add('theme-amber');
-      else if(t==='magenta') document.body.classList.add('theme-magenta');
-      else if(t==='light') document.body.classList.add('theme-light');
-      else document.body.classList.add('theme-phosphor');
-      PREFS.theme=t; save(storageKeyPrefs,PREFS);
-      writeLine("Theme switched: "+t,'ok');
-    },
-    crt(a){
-      if(!a.length){ writeLine("crt is "+(crtOn?"ON":"OFF")); return; }
-      if(a[0]==='off'){ crtOn=false; PREFS.crt=false; }
-      else if(a[0]==='on'){ crtOn=true; PREFS.crt=true; }
-      else { writeLine("Usage: crt on|off",'warn'); return; }
-      save(storageKeyPrefs,PREFS); applyCRTState();
-      writeLine("CRT "+(crtOn?"enabled":"disabled"),'ok');
-    },
-    font(a){
-      if(!a.length || a[0]==='list'){
-        writeLine("Fonts: vga  bios  cga  vt323  press  courier");
-        return;
+    function showBanner(){
+      writeLine("/*==============================================*/", 'dim');
+      writeLine("  CONSHAUNERY RETRO TERMINAL + CRT MODE", 'ok');
+      writeLine("  Type 'help' for commands. 'font list' to view fonts.", 'dim');
+      writeLine("/*==============================================*/\n", 'dim');
+      if (PREFS.showMotd !== false) {
+        writeLine("MOTD: Welcome back, wanderer of the cyberverse.\n(Type 'motd off' to hide this banner.)", 'warn');
       }
-      const pick = a[0].toLowerCase();
-      const map = {
-        vga: "'VGA8', monospace",
-        bios: "'VGA8BIOS', monospace",
-        cga: "'VGA8CGA', monospace",
-        vt323: "'VT323', monospace",
-        press: "'Press Start 2P', monospace",
-        courier: "'Courier New', monospace"
-      };
-      if(!map[pick]) { writeLine("Unknown font. Try: font list",'warn'); return; }
-      document.documentElement.style.setProperty('--font', map[pick]);
-      PREFS.fontFamily = map[pick];
-      save(storageKeyPrefs, PREFS);
-      writeLine("Font switched: "+pick,'ok');
-      // Press Start 2P is small; bump size slightly
-      if (pick === 'press') {
-        document.body.style.fontSize = '14px';
-        input.style.fontSize = '14px';
+    }
+    function writeLine(txt='', cls='', opt={}){
+      const line = document.createElement('div');
+      line.className = 'line ' + (cls || '');
+      if (typewriter && !opt.instant) {
+        typeWrite(line, txt, 0);
       } else {
-        document.body.style.fontSize = '18px';
-        input.style.fontSize = '18px';
+        line.textContent = txt;
       }
-    },
-    ascii(){
-      writeLine(String.raw`
-   ____   _____
-  / ___| / ____|  CS TERMINAL
- | |    | (___   stay weird
- | |     \___ \
- | |____  ___) |
-  \_____| |____/
-`);
-    },
-    scan(){
-      writeLine("Scanning nodes...");
-      setTimeout(()=>writeLine("Found: GATEWAY-7  LATENCY:42ms  STATUS:OPEN",'ok'),500);
-      setTimeout(()=>writeLine("Found: ARCHIVE-Ω  LATENCY:88ms  STATUS:LOCKED",'warn'),900);
-      setTimeout(()=>writeLine("Found: RELAY-X3   LATENCY:17ms  STATUS:OPEN",'ok'),1300);
-    },
-    hack(a){
-      const target=a[0]||'ARCHIVE-Ω';
-      writeLine(`Initiating intrusion on ${target} ...`);
-      const bar=document.createElement('div');
-      bar.className='progressbar';
-      bar.innerHTML='<span></span>';
-      term.appendChild(bar);
-      term.scrollTop=term.scrollHeight;
-      setTimeout(()=>writeLine("Bypassing ICE...",'dim'),900);
-      setTimeout(()=>writeLine("Injecting payload...",'dim'),2100);
-      setTimeout(()=>writeLine("Harvesting fragments...",'dim'),3000);
-      setTimeout(()=>writeLine("ACCESS GRANTED: "+target,'ok'),3600);
-    },
-    roll(a){
-      let sides=parseInt(a[0]||'6',10);
-      if(isNaN(sides)||sides<2) sides=6;
-      const val=1+Math.floor(Math.random()*sides);
-      writeLine(`Rolled d${sides}: ${val}`,'ok');
-    },
-    secret(a){
-      const code=(a[0]||'').toLowerCase();
-      if(code==='melon') writeLine("🍉 Melon Protocol Acknowledged.");
-      else if(code==='vibez') writeLine("~ cosmic resonance amplifying ~");
-      else writeLine("No reaction.",'dim');
-    },
-    save(){ save(storageKeyVars,VARS); save(storageKeyPrefs,PREFS); writeLine("State saved.",'ok'); },
-    load(){
-      VARS=load(storageKeyVars)||{}; PREFS=load(storageKeyPrefs)||{};
-      username=VARS.username||username;
-      writeLine("State reloaded.",'ok'); updatePrompt(); applyCRTState();
-      if (PREFS.fontFamily) document.documentElement.style.setProperty('--font', PREFS.fontFamily);
+      term.appendChild(line);
+      term.scrollTop = term.scrollHeight;
     }
-  };
-
-  // Restore saved theme
-  if (PREFS.theme) COMMANDS.theme([PREFS.theme]);
-
-  input.addEventListener('keydown', e=>{
-    if(e.key==='Enter'){
-      const raw=input.value; input.value='';
-      if(!raw.trim()) return;
-      history.unshift(raw); historyIndex=-1;
-      process(raw);
-    } else if (e.key==='ArrowUp'){
-      e.preventDefault();
-      if(history.length && historyIndex+1 < history.length){
-        historyIndex++; input.value=history[historyIndex];
-        setTimeout(()=>input.setSelectionRange(input.value.length,input.value.length),0);
+    function typeWrite(node, text, i){
+      const chunk = 2 + Math.floor(Math.random()*3);
+      node.textContent = text.slice(0, i + chunk);
+      if (i + chunk < text.length) {
+        setTimeout(()=> typeWrite(node, text, i+chunk), 12 + Math.random()*40);
       }
-    } else if (e.key==='ArrowDown'){
-      e.preventDefault();
-      if(historyIndex>0){ historyIndex--; input.value=history[historyIndex]; }
-      else { historyIndex=-1; input.value=''; }
-    } else if (e.key==='c' && e.ctrlKey){
-      writeLine("^C",'warn'); input.value='';
     }
-  });
-
-  function process(line){
-    writeLine(ps1.textContent+" "+line,'dim',{instant:true});
-    const parts=line.trim().split(/\s+/);
-    const cmd=parts.shift().toLowerCase();
-    if(!cmd) return;
-    if(COMMANDS[cmd]) {
-      try { COMMANDS[cmd](parts); }
-      catch(err){ writeLine("Runtime error: "+err.message,'error'); }
-    } else {
-      writeLine("Command not found: "+cmd,'error');
+    function applyCRTState(){
+      if (crtOn) crtFrame.classList.add('crt-active');
+      else       crtFrame.classList.remove('crt-active');
     }
-  }
 
-  // Theme quick links
-  document.querySelectorAll('#topbar [data-theme]').forEach(el=>{
-    el.addEventListener('click',()=>COMMANDS.theme([el.dataset.theme]));
-  });
+    const COMMANDS = {
+      help(){
+        writeLine("Commands:");
+        writeLine(Object.keys(COMMANDS).sort().join('  '));
+        writeLine("\nHighlights: load stillalive | font list | theme <name> | crt on/off | typewriter on/off");
+      },
+      about(){ writeLine("Retro terminal with orange CRT vibes."); },
+      clear(){ term.innerHTML = ''; }, cls(){ this.clear(); },
+      time(){ writeLine(new Date().toString()); },
+      echo(a){ writeLine(a.join(' ')); },
+      whoami(){ writeLine(username); },
+      set(a){
+        if (a.length < 2) { writeLine("Usage: set <name> <value>", 'warn'); return; }
+        const k = a.shift(), v = a.join(' ');
+        VARS[k] = v;
+        if (k === 'username') { username = v; updatePrompt(); }
+        save('cs_terminal_vars_v1', VARS);
+        writeLine(`Set ${k}=${v}`, 'ok');
+      },
+      get(a){
+        if (!a.length) { writeLine("Usage: get <name>", 'warn'); return; }
+        const k = a[0];
+        k in VARS ? writeLine(`${k}=${VARS[k]}`) : writeLine("No such variable.", 'warn');
+      },
+      listvars(){
+        const keys = Object.keys(VARS);
+        if (!keys.length) writeLine("No variables set.");
+        else keys.forEach(k => writeLine(`${k}=${VARS[k]}`));
+      },
+      resetvars(){
+        for (let k in VARS) delete VARS[k];
+        save('cs_terminal_vars_v1', VARS);
+        writeLine("All variables cleared.", 'ok');
+      },
+      motd(a){
+        if (!a.length) { writeLine("motd is " + (PREFS.showMotd===false?"OFF":"ON")); return; }
+        if (a[0]==='off') { PREFS.showMotd=false; save('cs_terminal_prefs_v1',PREFS); writeLine("MOTD disabled."); }
+        else if (a[0]==='on') { PREFS.showMotd=true; save('cs_terminal_prefs_v1',PREFS); writeLine("MOTD enabled."); }
+        else writeLine("Usage: motd on|off", 'warn');
+      },
+      typewriter(a){
+        if (!a.length) { writeLine("typewriter is " + (typewriter?"ON":"OFF")); return; }
+        if (a[0]==='on') {
+          typewriter=true; PREFS.typewriter=true; save('cs_terminal_prefs_v1',PREFS);
+          writeLine("Typewriter ON");
+        } else if (a[0]==='off') {
+          typewriter=false; PREFS.typewriter=false; save('cs_terminal_prefs_v1',PREFS);
+          writeLine("Typewriter OFF");
+        } else writeLine("Usage: typewriter on|off", 'warn');
+      },
+      theme(a){
+        if (!a.length) { writeLine("Themes: phosphor, amber, magenta, light"); return; }
+        const t = a[0].toLowerCase();
+        document.body.classList.remove('theme-phosphor','theme-amber','theme-magenta','theme-light');
+        document.body.classList.add('theme-'+t);
+        PREFS.theme = t; save('cs_terminal_prefs_v1',PREFS);
+        writeLine("Theme switched: " + t, 'ok');
+      },
+      crt(a){
+        if (!a.length) { writeLine("crt is " + (crtOn?"ON":"OFF")); return; }
+        if (a[0]==='off') crtOn=false;
+        else if (a[0]==='on') crtOn=true;
+        else { writeLine("Usage: crt on|off",'warn'); return; }
+        PREFS.crt = crtOn; save('cs_terminal_prefs_v1',PREFS);
+        applyCRTState();
+        writeLine("CRT " + (crtOn?"enabled":"disabled"), 'ok');
+      },
 
-})();
-</script>
+      /* ─── load stillalive ────────────────────────────── */
+      load(args){
+        if (args[0] && args[0].toLowerCase()==='stillalive') {
+          // pause background
+          bgAudio.pause();
+          // play portal song
+          const audio = new Audio('./sounds/stillalive.mp3');
+          audio.play().catch(()=>{ writeLine('🔈 Autoplay blocked; press any key.', 'warn'); });
+          // resume background after
+          audio.addEventListener('ended', ()=> bgAudio.play().catch(()=>{}));
+          writeLine('▶️ Playing “Still Alive”…', 'ok');
+          setTimeout(()=>{
+            writeLine('\n--- Still Alive (summary) ---', 'dim');
+            writeLine('End‑credits song from Portal, sung by GLaDOS.', 'dim');
+            writeLine('Reflecting on defeat, science, and… cake.', 'dim');
+            writeLine('\nHost full lyrics in `lyrics/stillalive.txt` and fetch to display them.', 'dim');
+          },1500);
+        } else {
+          writeLine("Usage: load stillalive", 'warn');
+        }
+      },
+
+      font(a){
+        if (!a.length||a[0]==='list'){ writeLine("Fonts: vga bios cga vt323 press courier"); return; }
+        const pick = a[0].toLowerCase(), map = {
+          vga:     "'VGA8',monospace",
+          bios:    "'VGA8BIOS',monospace",
+          cga:     "'VGA8CGA',monospace",
+          vt323:   "'VT323',monospace",
+          press:   "'Press Start 2P',monospace",
+          courier: "'Courier New',monospace"
+        };
+        if (!map[pick]) return writeLine("Unknown font. Try: font list",'warn');
+        document.documentElement.style.setProperty('--font', map[pick]);
+        PREFS.fontFamily = map[pick]; save('cs_terminal_prefs_v1',PREFS);
+        writeLine("Font switched: "+pick,'ok');
+        if (pick==='press') { document.body.style.fontSize='14px'; input.style.fontSize='14px'; }
+        else { document.body.style.fontSize='18px'; input.style.fontSize='18px'; }
+      },
+
+      ascii(){ writeLine(String.raw`
+     ______
+    /_____/\
+   /_____\\ \       SolarOS
+  /_____\ \\ /          Stay Solar
+ /_____/ \/ / / 
+/_____/ /   \//\ 
+\_____\//\   / / 
+ \_____/ / /\ /
+  \_____/ \\ \ 
+   \_____\ \\ 
+    \_____\/
+`); },
+
+      scan(){
+        writeLine("Scanning nodes...");
+        setTimeout(()=>writeLine("Found: GATEWAY-7  LATENCY:42ms  STATUS:OPEN",'ok'),500);
+        setTimeout(()=>writeLine("Found: ARCHIVE-Ω  LATENCY:88ms  STATUS:LOCKED",'warn'),900);
+        setTimeout(()=>writeLine("Found: RELAY-X3   LATENCY:17ms  STATUS:OPEN",'ok'),1300);
+      },
+
+      hack(a){
+        const tgt=a[0]||'ARCHIVE-Ω';
+        writeLine(`Initiating intrusion on ${tgt}...`);
+        const bar=document.createElement('div'); bar.className='progressbar'; bar.innerHTML='<span></span>';
+        term.appendChild(bar); term.scrollTop=term.scrollHeight;
+        setTimeout(()=>writeLine("Bypassing ICE...",'dim'),900);
+        setTimeout(()=>writeLine("Injecting payload...",'dim'),2100);
+        setTimeout(()=>writeLine("Harvesting fragments...",'dim'),3000);
+        setTimeout(()=>writeLine("ACCESS GRANTED: "+tgt,'ok'),3600);
+      },
+
+      roll(a){
+        let sides = parseInt(a[0]||6,10); if(isNaN(sides)||sides<2) sides=6;
+        writeLine(`Rolled d${sides}: ${1+Math.floor(Math.random()*sides)}`,'ok');
+      },
+
+      secret(a){
+        const code=(a[0]||'').toLowerCase();
+        if(code==='melon')       writeLine("🍉 Melon Protocol Acknowledged.");
+        else if(code==='vibez')  writeLine("~ cosmic resonance amplifying ~");
+        else                     writeLine("No reaction.",'dim');
+      },
+
+      save(){
+        save('cs_terminal_vars_v1',VARS);
+        save('cs_terminal_prefs_v1',PREFS);
+        writeLine("State saved.",'ok');
+      }
+    };
+
+    if (PREFS.theme) COMMANDS.theme([PREFS.theme]);
+
+    input.addEventListener('keydown', e=>{
+      if (e.key==='Enter') {
+        const raw = input.value; input.value='';
+        if (!raw.trim()) return;
+        history.unshift(raw); historyIndex=-1;
+        process(raw);
+      }
+      if (e.ctrlKey && e.key==='c') {
+        writeLine("^C",'warn'); input.value='';
+      }
+      if (e.key==='ArrowUp'||e.key==='ArrowDown') {
+        e.preventDefault();
+        historyIndex = e.key==='ArrowUp'
+          ? Math.min(historyIndex+1, history.length-1)
+          : Math.max(historyIndex-1, -1);
+        input.value = historyIndex>=0 ? history[historyIndex] : '';
+      }
+    });
+
+    function process(line){
+      writeLine(ps1.textContent+" "+line,'dim',{instant:true});
+      const parts = line.trim().split(/\s+/), cmd = parts.shift().toLowerCase();
+      if (COMMANDS[cmd]) {
+        try { COMMANDS[cmd](parts); }
+        catch(err){ writeLine("Runtime error: "+err.message,'error'); }
+      } else {
+        writeLine("Command not found: "+cmd,'error');
+      }
+    }
+
+    // theme buttons
+    document.querySelectorAll('#topbar [data-theme]').forEach(el=>
+      el.addEventListener('click', ()=>COMMANDS.theme([el.dataset.theme]))
+    );
+
+  })();
+  </script>
 </body>
 </html>
