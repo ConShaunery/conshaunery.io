@@ -13,28 +13,25 @@
   @font-face {
     font-family: 'VGA8';
     src: url('./fonts/Web437_IBM_3270pc.woff2') format('woff2'),
-         url('./fonts/Web437_IBM_3270pc.woff') format('woff');
-    font-display: swap;
+         url('./fonts/Web437_IBM_3270pc.woff')   format('woff');
   }
   @font-face {
     font-family: 'VGA8BIOS';
     src: url('./fonts/Web437_IBM_BIOS.woff2') format('woff2'),
-         url('./fonts/Web437_IBM_BIOS.woff') format('woff');
-    font-display: swap;
+         url('./fonts/Web437_IBM_BIOS.woff')  format('woff');
   }
   @font-face {
     font-family: 'VGA8CGA';
     src: url('./fonts/Web437_IBM_CGA.woff2') format('woff2'),
-         url('./fonts/Web437_IBM_CGA.woff') format('woff');
-    font-display: swap;
+         url('./fonts/Web437_IBM_CGA.woff')  format('woff');
   }
 
   /* ===== Root Variables (orange theme) ===== */
   :root {
     --bg: #000;
-    --fg: #ffa500;               /* orange text */
-    --accent: #ffa500;           /* orange highlights */
-    --dim: rgba(255,165,0,0.3);  /* dim orange */
+    --fg: #ffa500;
+    --accent: #ffa500;
+    --dim: rgba(255,165,0,0.3);
     --warn: #ffa500;
     --error: #f33;
     --font: 'VGA8', monospace;
@@ -61,8 +58,7 @@
 
   .crt-frame {
     position: relative; flex: 1; margin: 10px;
-    border: 3px solid #662200;
-    border-radius: 14px;
+    border: 3px solid #662200; border-radius: 14px;
     background: #000;
     box-shadow:
       0 0 10px rgba(255,165,0,0.3),
@@ -135,7 +131,7 @@
   .ok    { color: var(--accent); }
 
   .progressbar {
-    width: 100%; height: 12px; position: relative; margin: 4px 0 6px;
+    width: 100%; height: 12px; margin: 4px 0 6px; position: relative;
     border: 1px solid var(--accent);
     box-shadow: 0 0 6px rgba(255,165,0,0.6);
   }
@@ -172,8 +168,7 @@
     mix-blend-mode: multiply; z-index: 21;
   }
   .sweep::before {
-    content: ''; position: absolute;
-    left:0; right:0; top:-40%; height:40%;
+    content: ''; position: absolute; left:0; right:0; top:-40%; height:40%;
     background: linear-gradient(to bottom,
       rgba(255,255,255,0.08),
       rgba(255,255,255,0) 80%
@@ -183,12 +178,12 @@
   }
   @keyframes sweep {
     0%   { transform: translateY(0);   opacity:0.3; }
-    75%  { transform: translateY(220%); opacity:0; }
-    100% { transform: translateY(220%); opacity:0; }
+    75%  { transform: translateY(220%);opacity:0;   }
+    100% { transform: translateY(220%);opacity:0;   }
   }
 
   .crt-frame.crt-active {
-      animation: frameFlicker 2.7s steps(60,end) infinite;
+    animation: frameFlicker 2.7s steps(60,end) infinite;
   }
   @keyframes frameFlicker {
     0%   { filter: brightness(var(--crt-flicker-min)); }
@@ -197,7 +192,7 @@
   }
 
   /* Themes */
-  .theme-phosphor { /* same orange palette */ }
+  .theme-phosphor { }
   .theme-amber    { --fg:#ffcf7d; --accent:#ffa200; --dim:#995b10; }
   .theme-magenta  { --fg:#ff9bff; --accent:#ff44ff; --dim:#b646b6; }
   .theme-light    { --bg:#f5f5f5; --fg:#222; --accent:#0050b3; --dim:#666; }
@@ -207,7 +202,7 @@
   .orbit { position:absolute; top:0; left:50%; transform-origin:0 50px; animation:spin 4s linear infinite; }
   .bobbing { animation:bob 2s infinite ease-in-out; }
   @keyframes spin { 0%{transform:rotate(0) translateX(50px);}100%{transform:rotate(360deg) translateX(50px) rotate(-360deg);} }
-  @keyframes bob { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+  @keyframes bob  { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
   </style>
 </head>
 
@@ -261,7 +256,6 @@
     if (PREFS.fontFamily) {
       document.documentElement.style.setProperty('--font', PREFS.fontFamily);
     }
-
     applyCRTState();
     updatePrompt();
     showBanner();
@@ -300,8 +294,7 @@
       }
     }
     function applyCRTState(){
-      if (crtOn) crtFrame.classList.add('crt-active');
-      else       crtFrame.classList.remove('crt-active');
+      crtOn ? crtFrame.classList.add('crt-active') : crtFrame.classList.remove('crt-active');
     }
 
     const COMMANDS = {
@@ -315,41 +308,39 @@
       time(){ writeLine(new Date().toString()); },
       echo(a){ writeLine(a.join(' ')); },
       whoami(){ writeLine(username); },
+
       defrag(){
         writeLine("▶️ Defragmenting virtual disk…", 'dim');
         setTimeout(()=>{
           const img = document.createElement('img');
           img.src = "./gifs/defrag.gif";
           img.alt = "Defragmentation running";
-          img.style.maxWidth="100%";
+          img.style.maxWidth = "100%";
           term.appendChild(img);
           writeLine("✅ Defragmentation complete.", 'ok');
         }, 800);
       },
+
       load(args){
         if (args[0] && args[0].toLowerCase()==='stillalive') {
           bgAudio.pause();
           const audio = new Audio('./sounds/music/stillalive.mp3');
           audio.play().catch(()=>{ writeLine('🔈 Autoplay blocked; press any key.', 'warn'); });
           writeLine('▶️ Playing “Still Alive”…', 'ok');
-
-          // timestamped lyrics
+          // schedule a few sample lyrics
           const lyrics = [
             [0.0,   "This was a triumph."],
             [5.0,   "I’m making a note here: HUGE success."],
             [10.0,  "It’s hard to overstate my satisfaction."],
-            [18.0,  "Aperture Science:"],
-            [22.0,  "We do what we must..."],
+            [18.0,  "Aperture Science: We do what we must..."],
             [23.5,  "...because we can."],
             [27.0,  "For the good of all of us."]
-            // extend as desired...
           ];
           if (this._timeouts) this._timeouts.forEach(clearTimeout);
           this._timeouts = [];
           lyrics.forEach(([t, line]) => {
-            this._timeouts.push(setTimeout(()=> writeLine(line), t * 1000));
+            this._timeouts.push(setTimeout(()=> writeLine(line), t*1000));
           });
-
           audio.addEventListener('ended', () => {
             bgAudio.currentTime = 0;
             bgAudio.play().catch(()=>{});
@@ -359,24 +350,28 @@
           writeLine("Usage: load stillalive", 'warn');
         }
       },
+
       scan(){
         writeLine("Scanning nodes...");
         setTimeout(()=> writeLine("Found: GATEWAY-7  LATENCY:42ms  STATUS:OPEN",'ok'),500);
         setTimeout(()=> writeLine("Found: ARCHIVE-Ω  LATENCY:88ms  STATUS:LOCKED",'warn'),900);
         setTimeout(()=> writeLine("Found: RELAY-X3   LATENCY:17ms  STATUS:OPEN",'ok'),1300);
       },
+
       probe(a){
-        const tgt = a[0]||'ARCHIVE-Ω';
-        writeLine(`▶️ Probing ${tgt}…`);
+        const tgt = a[0] || 'ARCHIVE-Ω';
+        writeLine(`Sending probes to ${tgt}...`, 'dim');
         const bar = document.createElement('div');
         bar.className = 'progressbar';
         bar.innerHTML = '<span></span>';
         term.appendChild(bar);
-        setTimeout(()=> writeLine("✅ Probe complete.", 'ok'), 2000);
+        setTimeout(()=> writeLine("Ejecting from local diskdrive...", 'dim'), 3500);
+        setTimeout(()=> writeLine("ACCESS GRANTED: "+tgt,'ok'), 4500);
       },
+
       hack(a){
-        const tgt = a[0]||'ARCHIVE-Ω';
-        writeLine(`Initiating intrusion on ${tgt}...`);
+        const tgt = a[0] || 'ARCHIVE-Ω';
+        writeLine(`Initiating intrusion on ${tgt}...`, 'dim');
         const bar = document.createElement('div');
         bar.className = 'progressbar';
         bar.innerHTML = '<span></span>';
@@ -386,54 +381,76 @@
         setTimeout(()=> writeLine("Harvesting fragments...",'dim'),3000);
         setTimeout(()=> writeLine("ACCESS GRANTED: "+tgt,'ok'),3600);
       },
+
       font(a){
-        if (!a.length||a[0]==='list'){ writeLine("Fonts: vga bios cga vt323 press courier"); return;}
-        const pick=a[0].toLowerCase(), map={
-          vga:"'VGA8',monospace", bios:"'VGA8BIOS',monospace",
-          cga:"'VGA8CGA',monospace", vt323:"'VT323',monospace",
-          press:"'Press Start 2P',monospace", courier:"'Courier New',monospace"
+        if (!a.length||a[0]==='list'){
+          writeLine("Fonts: vga bios cga vt323 press courier");
+          return;
+        }
+        const pick = a[0].toLowerCase(), map = {
+          vga:   "'VGA8', monospace",
+          bios:  "'VGA8BIOS', monospace",
+          cga:   "'VGA8CGA', monospace",
+          vt323: "'VT323', monospace",
+          press: "'Press Start 2P', monospace",
+          courier:"'Courier New', monospace"
         };
-        if (!map[pick]) return writeLine("Unknown font. Try: font list",'warn');
+        if (!map[pick]) { writeLine("Unknown font. Try: font list",'warn'); return; }
         document.documentElement.style.setProperty('--font', map[pick]);
-        PREFS.fontFamily = map[pick]; save('cs_terminal_prefs_v1',PREFS);
+        PREFS.fontFamily = map[pick]; save('cs_terminal_prefs_v1', PREFS);
         writeLine("Font switched: "+pick,'ok');
-        if (pick==='press'){ document.body.style.fontSize='14px'; input.style.fontSize='14px'; }
-        else { document.body.style.fontSize='18px'; input.style.fontSize='18px'; }
+        if (pick==='press'){ input.style.fontSize='14px'; }
+        else { input.style.fontSize='18px'; }
       },
+
       theme(a){
         if (!a.length){ writeLine("Themes: phosphor, amber, magenta, light"); return; }
-        const t=a[0].toLowerCase();
+        const t = a[0].toLowerCase();
         document.body.classList.remove('theme-phosphor','theme-amber','theme-magenta','theme-light');
         document.body.classList.add('theme-'+t);
-        PREFS.theme=t; save('cs_terminal_prefs_v1',PREFS);
+        PREFS.theme = t; save('cs_terminal_prefs_v1', PREFS);
         writeLine("Theme switched: "+t,'ok');
       },
+
       crt(a){
         if (!a.length){ writeLine("crt is "+(crtOn?"ON":"OFF")); return; }
         if (a[0]==='off') crtOn=false;
-        else if (a[0]==='on')  crtOn=true;
+        else if (a[0]==='on') crtOn=true;
         else { writeLine("Usage: crt on|off",'warn'); return; }
-        PREFS.crt=crtOn; save('cs_terminal_prefs_v1',PREFS);
+        PREFS.crt = crtOn; save('cs_terminal_prefs_v1', PREFS);
         applyCRTState();
         writeLine("CRT "+(crtOn?"enabled":"disabled"),'ok');
       },
+
       typewriter(a){
         if (!a.length){ writeLine("typewriter is "+(typewriter?"ON":"OFF")); return; }
-        if (a[0]==='on'){ typewriter=true;  PREFS.typewriter=true; save('cs_terminal_prefs_v1',PREFS); writeLine("Typewriter ON"); }
+        if (a[0]==='on'){ typewriter=true; PREFS.typewriter=true; save('cs_terminal_prefs_v1',PREFS); writeLine("Typewriter ON"); }
         else if (a[0]==='off'){ typewriter=false; PREFS.typewriter=false; save('cs_terminal_prefs_v1',PREFS); writeLine("Typewriter OFF"); }
         else writeLine("Usage: typewriter on|off",'warn');
       },
-      save(){ save('cs_terminal_vars_v1',VARS); save('cs_terminal_prefs_v1',PREFS); writeLine("State saved.",'ok'); }
+
+      echo(a){ writeLine(a.join(' ')); },
+      whoami(){ writeLine(username); },
+
+      save(){ 
+        save('cs_terminal_vars_v1', VARS);
+        save('cs_terminal_prefs_v1', PREFS);
+        writeLine("State saved.", 'ok');
+      }
     };
 
     if (PREFS.theme) COMMANDS.theme([PREFS.theme]);
 
     input.addEventListener('keydown', e=>{
       if (e.key==='Enter'){
-        const raw = input.value; input.value=''; if (!raw.trim()) return;
-        history.unshift(raw); historyIndex=-1; process(raw);
+        const raw = input.value; input.value='';
+        if (!raw.trim()) return;
+        history.unshift(raw); historyIndex=-1;
+        process(raw);
       }
-      if (e.ctrlKey && e.key==='c'){ writeLine("^C",'warn'); input.value=''; }
+      if (e.ctrlKey && e.key==='c'){
+        writeLine("^C", 'warn'); input.value='';
+      }
       if (e.key==='ArrowUp'|| e.key==='ArrowDown'){
         e.preventDefault();
         historyIndex = (e.key==='ArrowUp')
@@ -444,13 +461,14 @@
     });
 
     function process(line){
-      writeLine(ps1.textContent + " " + line,'dim',{instant:true});
-      const parts = line.trim().split(/\s+/), cmd = parts.shift().toLowerCase();
+      writeLine(ps1.textContent+" "+line, 'dim', { instant:true });
+      const parts = line.trim().split(/\s+/);
+      const cmd   = parts.shift().toLowerCase();
       if (COMMANDS[cmd]) {
         try { COMMANDS[cmd](parts); }
-        catch(err){ writeLine("Runtime error: "+err.message,'error'); }
+        catch(err){ writeLine("Runtime error: "+err.message, 'error'); }
       } else {
-        writeLine("Command not found: "+cmd,'error');
+        writeLine("Command not found: "+cmd, 'error');
       }
     }
 
