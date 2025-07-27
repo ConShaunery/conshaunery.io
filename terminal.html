@@ -310,14 +310,14 @@
       whoami(){ writeLine(username); },
 
       defrag(){
-        writeLine("▶️ Defragmenting virtual disk…", 'dim');
+        writeLine("Defragmenting virtual disk…", 'dim');
         setTimeout(()=>{
           const img = document.createElement('img');
           img.src = "./gifs/defrag.gif";
           img.alt = "Defragmentation running";
           img.style.maxWidth = "100%";
           term.appendChild(img);
-          writeLine("✅ Defragmentation complete.", 'ok');
+          writeLine("Defragmentation complete.", 'ok');
         }, 800);
       },
 
@@ -326,15 +326,18 @@
           bgAudio.pause();
           const audio = new Audio('./sounds/music/stillalive.mp3');
           audio.play().catch(()=>{ writeLine('🔈 Autoplay blocked; press any key.', 'warn'); });
-          writeLine('▶️ Playing “Still Alive”…', 'ok');
+          writeLine('Playing “Still Alive”…', 'ok');
           // schedule a few sample lyrics
           const lyrics = [
             [0.0,   "This was a triumph."],
             [5.0,   "I’m making a note here: HUGE success."],
             [10.0,  "It’s hard to overstate my satisfaction."],
-            [18.0,  "Aperture Science: We do what we must..."],
-            [23.5,  "...because we can."],
+            [18.0,  "Aperture Science:..."],
+            [21.0,  " We do what we must..."]
+            [23.5,  "...because..."],
+            [24.0,  "we can."]
             [27.0,  "For the good of all of us."]
+            [28.5,  "Except the ones who are dead."]
           ];
           if (this._timeouts) this._timeouts.forEach(clearTimeout);
           this._timeouts = [];
@@ -354,7 +357,9 @@
       scan(){
         writeLine("Scanning nodes...");
         setTimeout(()=> writeLine("Found: GATEWAY-7  LATENCY:42ms  STATUS:OPEN",'ok'),500);
-        setTimeout(()=> writeLine("Found: ARCHIVE-Ω  LATENCY:88ms  STATUS:LOCKED",'warn'),900);
+        setTimeout(()=> writeLine("Found: 107.89.420.67  LATENCY:72ms  STATUS:OPEN",'ok'),800);
+        setTimeout(()=> writeLine("Found: ARCHIVE-69  LATENCY:88ms  STATUS:LOCKED",'warn'),900);
+        setTimeout(()=> writeLine("Found: 28.73.125.01  LATENCY:72ms  STATUS:OPEN",'ok'),1100);
         setTimeout(()=> writeLine("Found: RELAY-X3   LATENCY:17ms  STATUS:OPEN",'ok'),1300);
       },
 
