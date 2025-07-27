@@ -328,14 +328,12 @@
       },
       load(args){
         if (args[0] && args[0].toLowerCase()==='stillalive') {
-          // pause background
           bgAudio.pause();
-          // play Portal song
           const audio = new Audio('./sounds/music/stillalive.mp3');
           audio.play().catch(()=>{ writeLine('🔈 Autoplay blocked; press any key.', 'warn'); });
           writeLine('▶️ Playing “Still Alive”…', 'ok');
 
-          // schedule lyrics
+          // timestamped lyrics
           const lyrics = [
             [0.0,   "This was a triumph."],
             [5.0,   "I’m making a note here: HUGE success."],
@@ -344,17 +342,14 @@
             [22.0,  "We do what we must..."],
             [23.5,  "...because we can."],
             [27.0,  "For the good of all of us."]
-            // …extend with full timestamps…
+            // extend as desired...
           ];
-          // clear previous timeouts
           if (this._timeouts) this._timeouts.forEach(clearTimeout);
           this._timeouts = [];
           lyrics.forEach(([t, line]) => {
-            const to = setTimeout(()=> writeLine(line), t * 1000);
-            this._timeouts.push(to);
+            this._timeouts.push(setTimeout(()=> writeLine(line), t * 1000));
           });
 
-          // resume background when song ends
           audio.addEventListener('ended', () => {
             bgAudio.currentTime = 0;
             bgAudio.play().catch(()=>{});
@@ -372,18 +367,12 @@
       },
       probe(a){
         const tgt = a[0]||'ARCHIVE-Ω';
-        writeLine(`Sending cyber probes to ${tgt}...`);
+        writeLine(`▶️ Probing ${tgt}…`);
         const bar = document.createElement('div');
         bar.className = 'progressbar';
         bar.innerHTML = '<span></span>';
         term.appendChild(bar);
-        term.scrollTop = term.scrollHeight;
-        setTimeout(()=> writeLine("Probing...",'dim'),900);
-        setTimeout(()=> writeLine("Injecting payload...",'dim'),2100);
-        setTimeout(()=> writeLine("Thrusting fragments into dataports...",'dim'),3000);
-        setTimeout(()=> writeLine("Ejecting from local diskdrive... "'dim'),3500);
-        setTimeout(()=> writeLine("............ "'dim'),3900);
-        setTimeout(()=> writeLine("ACCESS GRANTED: "+tgt,'ok'),4500);
+        setTimeout(()=> writeLine("✅ Probe complete.", 'ok'), 2000);
       },
       hack(a){
         const tgt = a[0]||'ARCHIVE-Ω';
@@ -392,7 +381,6 @@
         bar.className = 'progressbar';
         bar.innerHTML = '<span></span>';
         term.appendChild(bar);
-        term.scrollTop = term.scrollHeight;
         setTimeout(()=> writeLine("Bypassing ICE...",'dim'),900);
         setTimeout(()=> writeLine("Injecting payload...",'dim'),2100);
         setTimeout(()=> writeLine("Harvesting fragments...",'dim'),3000);
@@ -435,8 +423,6 @@
         else if (a[0]==='off'){ typewriter=false; PREFS.typewriter=false; save('cs_terminal_prefs_v1',PREFS); writeLine("Typewriter OFF"); }
         else writeLine("Usage: typewriter on|off",'warn');
       },
-      echo(a){ writeLine(a.join(' ')); },
-      whoami(){ writeLine(username); },
       save(){ save('cs_terminal_vars_v1',VARS); save('cs_terminal_prefs_v1',PREFS); writeLine("State saved.",'ok'); }
     };
 
