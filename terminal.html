@@ -308,7 +308,6 @@
       help(){
         writeLine("Commands:");
         writeLine(Object.keys(COMMANDS).sort().join('  '));
-        writeLine("\nHighlights: load stillalive | font list | theme <name> | crt on/off | typewriter on/off");
       },
       about(){ writeLine("Retro terminal with orange CRT vibes."); },
       clear(){ term.innerHTML = ''; }, cls(){ this.clear(); },
@@ -378,7 +377,7 @@
           // pause background
           bgAudio.pause();
           // play portal song
-          const audio = new Audio('./sounds/stillalive.mp3');
+          const audio = new Audio('./sounds/music/stillalive.mp3');
           audio.play().catch(()=>{ writeLine('🔈 Autoplay blocked; press any key.', 'warn'); });
           // resume background after
           audio.addEventListener('ended', ()=> bgAudio.play().catch(()=>{}));
