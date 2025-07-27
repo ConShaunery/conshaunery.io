@@ -308,7 +308,7 @@
       help(){
         writeLine("Commands:");
         writeLine(Object.keys(COMMANDS).sort().join('  '));
-        writeLine("\nHighlights: load stillalive | defrag | scan | hack | font list | theme <name> | crt on/off | typewriter on/off");
+        writeLine("\nHighlights: load stillalive | defrag | scan | probe | hack | font list | theme <name> | crt on/off | typewriter on/off");
       },
       about(){ writeLine("Retro terminal with orange CRT vibes."); },
       clear(){ term.innerHTML = ''; }, cls(){ this.clear(); },
