@@ -370,6 +370,22 @@
         setTimeout(()=> writeLine("Found: ARCHIVE-Ω  LATENCY:88ms  STATUS:LOCKED",'warn'),900);
         setTimeout(()=> writeLine("Found: RELAY-X3   LATENCY:17ms  STATUS:OPEN",'ok'),1300);
       },
+      probe(a){
+        const tgt = a[0]||'ARCHIVE-Ω';
+        writeLine(`Sending cyber probes to ${tgt}...`);
+        const bar = document.createElement('div');
+        bar.className = 'progressbar';
+        bar.innerHTML = '<span></span>';
+        term.appendChild(bar);
+        term.scrollTop = term.scrollHeight;
+        setTimeout(()=> writeLine("Probing...",'dim'),900);
+        setTimeout(()=> writeLine("Injecting payload...",'dim'),2100);
+        setTimeout(()=> writeLine("Thrusting fragments into dataports...",'dim'),3000);
+        setTimeout(()=> writeLine("Ejecting from local diskdrive... "'dim'),3500);
+        setTimeout(()=> writeLine("............ "'dim'),3900);
+        setTimeout(()=> writeLine("ACCESS GRANTED: "+tgt,'ok'),4500);
+      },
+      
       hack(a){
         const tgt = a[0]||'ARCHIVE-Ω';
         writeLine(`Initiating intrusion on ${tgt}...`);
