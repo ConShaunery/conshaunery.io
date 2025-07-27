@@ -239,7 +239,7 @@
     </div>
   </div>
 
-  <!-- background audio (give it an id) -->
+  <!-- background audio -->
   <audio id="bg-audio" autoplay loop>
     <source src="./sounds/demos.mp3" type="audio/mpeg">
   </audio>
@@ -252,11 +252,11 @@
     const crtFrame  = document.getElementById('crtFrame');
     const bgAudio   = document.getElementById('bg-audio');
     const VARS      = JSON.parse(localStorage.getItem('cs_terminal_vars_v1')  || '{}');
-    const PREFS     = JSON.parse(localStorage.getItem('cs_terminal_prefs_v1')|| '{}');
+    const PREFS     = JSON.parse(localStorage.getItem('cs_terminal_prefs_v1') || '{}');
     let history     = [], historyIndex = -1;
     let typewriter  = PREFS.typewriter || false;
     let username    = VARS.username   || 'guest';
-    let crtOn       = PREFS.crt !== false;
+    let crtOn       = PREFS.crt       !== false;
 
     if (PREFS.fontFamily) {
       document.documentElement.style.setProperty('--font', PREFS.fontFamily);
@@ -308,175 +308,134 @@
       help(){
         writeLine("Commands:");
         writeLine(Object.keys(COMMANDS).sort().join('  '));
+        writeLine("\nHighlights: load stillalive | defrag | scan | hack | font list | theme <name> | crt on/off | typewriter on/off");
       },
       about(){ writeLine("Retro terminal with orange CRT vibes."); },
       clear(){ term.innerHTML = ''; }, cls(){ this.clear(); },
       time(){ writeLine(new Date().toString()); },
       echo(a){ writeLine(a.join(' ')); },
       whoami(){ writeLine(username); },
-      set(a){
-        if (a.length < 2) { writeLine("Usage: set <name> <value>", 'warn'); return; }
-        const k = a.shift(), v = a.join(' ');
-        VARS[k] = v;
-        if (k === 'username') { username = v; updatePrompt(); }
-        save('cs_terminal_vars_v1', VARS);
-        writeLine(`Set ${k}=${v}`, 'ok');
+      defrag(){
+        writeLine("▶️ Defragmenting virtual disk…", 'dim');
+        setTimeout(()=>{
+          const img = document.createElement('img');
+          img.src = "./gifs/defrag.gif";
+          img.alt = "Defragmentation running";
+          img.style.maxWidth="100%";
+          term.appendChild(img);
+          writeLine("✅ Defragmentation complete.", 'ok');
+        }, 800);
       },
-      get(a){
-        if (!a.length) { writeLine("Usage: get <name>", 'warn'); return; }
-        const k = a[0];
-        k in VARS ? writeLine(`${k}=${VARS[k]}`) : writeLine("No such variable.", 'warn');
-      },
-      listvars(){
-        const keys = Object.keys(VARS);
-        if (!keys.length) writeLine("No variables set.");
-        else keys.forEach(k => writeLine(`${k}=${VARS[k]}`));
-      },
-      resetvars(){
-        for (let k in VARS) delete VARS[k];
-        save('cs_terminal_vars_v1', VARS);
-        writeLine("All variables cleared.", 'ok');
-      },
-      motd(a){
-        if (!a.length) { writeLine("motd is " + (PREFS.showMotd===false?"OFF":"ON")); return; }
-        if (a[0]==='off') { PREFS.showMotd=false; save('cs_terminal_prefs_v1',PREFS); writeLine("MOTD disabled."); }
-        else if (a[0]==='on') { PREFS.showMotd=true; save('cs_terminal_prefs_v1',PREFS); writeLine("MOTD enabled."); }
-        else writeLine("Usage: motd on|off", 'warn');
-      },
-      typewriter(a){
-        if (!a.length) { writeLine("typewriter is " + (typewriter?"ON":"OFF")); return; }
-        if (a[0]==='on') {
-          typewriter=true; PREFS.typewriter=true; save('cs_terminal_prefs_v1',PREFS);
-          writeLine("Typewriter ON");
-        } else if (a[0]==='off') {
-          typewriter=false; PREFS.typewriter=false; save('cs_terminal_prefs_v1',PREFS);
-          writeLine("Typewriter OFF");
-        } else writeLine("Usage: typewriter on|off", 'warn');
-      },
-      theme(a){
-        if (!a.length) { writeLine("Themes: phosphor, amber, magenta, light"); return; }
-        const t = a[0].toLowerCase();
-        document.body.classList.remove('theme-phosphor','theme-amber','theme-magenta','theme-light');
-        document.body.classList.add('theme-'+t);
-        PREFS.theme = t; save('cs_terminal_prefs_v1',PREFS);
-        writeLine("Theme switched: " + t, 'ok');
-      },
-      crt(a){
-        if (!a.length) { writeLine("crt is " + (crtOn?"ON":"OFF")); return; }
-        if (a[0]==='off') crtOn=false;
-        else if (a[0]==='on') crtOn=true;
-        else { writeLine("Usage: crt on|off",'warn'); return; }
-        PREFS.crt = crtOn; save('cs_terminal_prefs_v1',PREFS);
-        applyCRTState();
-        writeLine("CRT " + (crtOn?"enabled":"disabled"), 'ok');
-      },
-
-      /* ─── load stillalive ────────────────────────────── */
       load(args){
         if (args[0] && args[0].toLowerCase()==='stillalive') {
           // pause background
           bgAudio.pause();
-          // play portal song
+          // play Portal song
           const audio = new Audio('./sounds/music/stillalive.mp3');
           audio.play().catch(()=>{ writeLine('🔈 Autoplay blocked; press any key.', 'warn'); });
-          // resume background after
-          audio.addEventListener('ended', ()=> bgAudio.play().catch(()=>{}));
           writeLine('▶️ Playing “Still Alive”…', 'ok');
-          setTimeout(()=>{
-            writeLine('\n--- Still Alive (summary) ---', 'dim');
-            writeLine('End‑credits song from Portal, sung by GLaDOS.', 'dim');
-            writeLine('Reflecting on defeat, science, and… cake.', 'dim');
-            writeLine('\nHost full lyrics in `lyrics/stillalive.txt` and fetch to display them.', 'dim');
-          },1500);
+
+          // schedule lyrics
+          const lyrics = [
+            [0.0,   "This was a triumph."],
+            [5.0,   "I’m making a note here: HUGE success."],
+            [10.0,  "It’s hard to overstate my satisfaction."],
+            [18.0,  "Aperture Science:"],
+            [22.0,  "We do what we must..."],
+            [23.5,  "...because we can."],
+            [27.0,  "For the good of all of us."]
+            // …extend with full timestamps…
+          ];
+          // clear previous timeouts
+          if (this._timeouts) this._timeouts.forEach(clearTimeout);
+          this._timeouts = [];
+          lyrics.forEach(([t, line]) => {
+            const to = setTimeout(()=> writeLine(line), t * 1000);
+            this._timeouts.push(to);
+          });
+
+          // resume background when song ends
+          audio.addEventListener('ended', () => {
+            bgAudio.currentTime = 0;
+            bgAudio.play().catch(()=>{});
+            writeLine('+++ Background track resumed +++', 'ok');
+          });
         } else {
           writeLine("Usage: load stillalive", 'warn');
         }
       },
-
+      scan(){
+        writeLine("Scanning nodes...");
+        setTimeout(()=> writeLine("Found: GATEWAY-7  LATENCY:42ms  STATUS:OPEN",'ok'),500);
+        setTimeout(()=> writeLine("Found: ARCHIVE-Ω  LATENCY:88ms  STATUS:LOCKED",'warn'),900);
+        setTimeout(()=> writeLine("Found: RELAY-X3   LATENCY:17ms  STATUS:OPEN",'ok'),1300);
+      },
+      hack(a){
+        const tgt = a[0]||'ARCHIVE-Ω';
+        writeLine(`Initiating intrusion on ${tgt}...`);
+        const bar = document.createElement('div');
+        bar.className = 'progressbar';
+        bar.innerHTML = '<span></span>';
+        term.appendChild(bar);
+        term.scrollTop = term.scrollHeight;
+        setTimeout(()=> writeLine("Bypassing ICE...",'dim'),900);
+        setTimeout(()=> writeLine("Injecting payload...",'dim'),2100);
+        setTimeout(()=> writeLine("Harvesting fragments...",'dim'),3000);
+        setTimeout(()=> writeLine("ACCESS GRANTED: "+tgt,'ok'),3600);
+      },
       font(a){
-        if (!a.length||a[0]==='list'){ writeLine("Fonts: vga bios cga vt323 press courier"); return; }
-        const pick = a[0].toLowerCase(), map = {
-          vga:     "'VGA8',monospace",
-          bios:    "'VGA8BIOS',monospace",
-          cga:     "'VGA8CGA',monospace",
-          vt323:   "'VT323',monospace",
-          press:   "'Press Start 2P',monospace",
-          courier: "'Courier New',monospace"
+        if (!a.length||a[0]==='list'){ writeLine("Fonts: vga bios cga vt323 press courier"); return;}
+        const pick=a[0].toLowerCase(), map={
+          vga:"'VGA8',monospace", bios:"'VGA8BIOS',monospace",
+          cga:"'VGA8CGA',monospace", vt323:"'VT323',monospace",
+          press:"'Press Start 2P',monospace", courier:"'Courier New',monospace"
         };
         if (!map[pick]) return writeLine("Unknown font. Try: font list",'warn');
         document.documentElement.style.setProperty('--font', map[pick]);
         PREFS.fontFamily = map[pick]; save('cs_terminal_prefs_v1',PREFS);
         writeLine("Font switched: "+pick,'ok');
-        if (pick==='press') { document.body.style.fontSize='14px'; input.style.fontSize='14px'; }
+        if (pick==='press'){ document.body.style.fontSize='14px'; input.style.fontSize='14px'; }
         else { document.body.style.fontSize='18px'; input.style.fontSize='18px'; }
       },
-
-      ascii(){ writeLine(String.raw`
-     ______
-    /_____/\
-   /_____\\ \       SolarOS
-  /_____\ \\ /          Stay Solar
- /_____/ \/ / / 
-/_____/ /   \//\ 
-\_____\//\   / / 
- \_____/ / /\ /
-  \_____/ \\ \ 
-   \_____\ \\ 
-    \_____\/
-`); },
-
-      scan(){
-        writeLine("Scanning nodes...");
-        setTimeout(()=>writeLine("Found: GATEWAY-7  LATENCY:42ms  STATUS:OPEN",'ok'),500);
-        setTimeout(()=>writeLine("Found: ARCHIVE-Ω  LATENCY:88ms  STATUS:LOCKED",'warn'),900);
-        setTimeout(()=>writeLine("Found: RELAY-X3   LATENCY:17ms  STATUS:OPEN",'ok'),1300);
+      theme(a){
+        if (!a.length){ writeLine("Themes: phosphor, amber, magenta, light"); return; }
+        const t=a[0].toLowerCase();
+        document.body.classList.remove('theme-phosphor','theme-amber','theme-magenta','theme-light');
+        document.body.classList.add('theme-'+t);
+        PREFS.theme=t; save('cs_terminal_prefs_v1',PREFS);
+        writeLine("Theme switched: "+t,'ok');
       },
-
-      hack(a){
-        const tgt=a[0]||'ARCHIVE-Ω';
-        writeLine(`Initiating intrusion on ${tgt}...`);
-        const bar=document.createElement('div'); bar.className='progressbar'; bar.innerHTML='<span></span>';
-        term.appendChild(bar); term.scrollTop=term.scrollHeight;
-        setTimeout(()=>writeLine("Bypassing ICE...",'dim'),900);
-        setTimeout(()=>writeLine("Injecting payload...",'dim'),2100);
-        setTimeout(()=>writeLine("Harvesting fragments...",'dim'),3000);
-        setTimeout(()=>writeLine("ACCESS GRANTED: "+tgt,'ok'),3600);
+      crt(a){
+        if (!a.length){ writeLine("crt is "+(crtOn?"ON":"OFF")); return; }
+        if (a[0]==='off') crtOn=false;
+        else if (a[0]==='on')  crtOn=true;
+        else { writeLine("Usage: crt on|off",'warn'); return; }
+        PREFS.crt=crtOn; save('cs_terminal_prefs_v1',PREFS);
+        applyCRTState();
+        writeLine("CRT "+(crtOn?"enabled":"disabled"),'ok');
       },
-
-      roll(a){
-        let sides = parseInt(a[0]||6,10); if(isNaN(sides)||sides<2) sides=6;
-        writeLine(`Rolled d${sides}: ${1+Math.floor(Math.random()*sides)}`,'ok');
+      typewriter(a){
+        if (!a.length){ writeLine("typewriter is "+(typewriter?"ON":"OFF")); return; }
+        if (a[0]==='on'){ typewriter=true;  PREFS.typewriter=true; save('cs_terminal_prefs_v1',PREFS); writeLine("Typewriter ON"); }
+        else if (a[0]==='off'){ typewriter=false; PREFS.typewriter=false; save('cs_terminal_prefs_v1',PREFS); writeLine("Typewriter OFF"); }
+        else writeLine("Usage: typewriter on|off",'warn');
       },
-
-      secret(a){
-        const code=(a[0]||'').toLowerCase();
-        if(code==='melon')       writeLine("🍉 Melon Protocol Acknowledged.");
-        else if(code==='vibez')  writeLine("~ cosmic resonance amplifying ~");
-        else                     writeLine("No reaction.",'dim');
-      },
-
-      save(){
-        save('cs_terminal_vars_v1',VARS);
-        save('cs_terminal_prefs_v1',PREFS);
-        writeLine("State saved.",'ok');
-      }
+      echo(a){ writeLine(a.join(' ')); },
+      whoami(){ writeLine(username); },
+      save(){ save('cs_terminal_vars_v1',VARS); save('cs_terminal_prefs_v1',PREFS); writeLine("State saved.",'ok'); }
     };
 
     if (PREFS.theme) COMMANDS.theme([PREFS.theme]);
 
     input.addEventListener('keydown', e=>{
-      if (e.key==='Enter') {
-        const raw = input.value; input.value='';
-        if (!raw.trim()) return;
-        history.unshift(raw); historyIndex=-1;
-        process(raw);
+      if (e.key==='Enter'){
+        const raw = input.value; input.value=''; if (!raw.trim()) return;
+        history.unshift(raw); historyIndex=-1; process(raw);
       }
-      if (e.ctrlKey && e.key==='c') {
-        writeLine("^C",'warn'); input.value='';
-      }
-      if (e.key==='ArrowUp'||e.key==='ArrowDown') {
+      if (e.ctrlKey && e.key==='c'){ writeLine("^C",'warn'); input.value=''; }
+      if (e.key==='ArrowUp'|| e.key==='ArrowDown'){
         e.preventDefault();
-        historyIndex = e.key==='ArrowUp'
+        historyIndex = (e.key==='ArrowUp')
           ? Math.min(historyIndex+1, history.length-1)
           : Math.max(historyIndex-1, -1);
         input.value = historyIndex>=0 ? history[historyIndex] : '';
@@ -484,7 +443,7 @@
     });
 
     function process(line){
-      writeLine(ps1.textContent+" "+line,'dim',{instant:true});
+      writeLine(ps1.textContent + " " + line,'dim',{instant:true});
       const parts = line.trim().split(/\s+/), cmd = parts.shift().toLowerCase();
       if (COMMANDS[cmd]) {
         try { COMMANDS[cmd](parts); }
@@ -498,7 +457,6 @@
     document.querySelectorAll('#topbar [data-theme]').forEach(el=>
       el.addEventListener('click', ()=>COMMANDS.theme([el.dataset.theme]))
     );
-
   })();
   </script>
 </body>
