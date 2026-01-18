@@ -150,11 +150,11 @@
       let answer;
       if (q.includes("place")) {
         answer = "This is a place of the past...Now that those destroyed our future....";
-      } else if (q.includes("who")) {
+      } else if (q.includes("who", "what" ,"where")) {
         answer = "I am the gatekeeper of this cyberrealm, ever watchful. Sha'za Zuk Kysion the name.";
       } else if (q.includes("help")) {
         answer = "Ask of origins, purpose, or secrets—then press ‘Proceed’.";
-      } else if (q.includes("music")) {
+      } else if (q.includes("music", "song", "sound")) {
         answer = "The melody you hear stems from the sunset echoes of old nets.";
       } else {
         answer = "I know not that. Speak of the realm’s lore or proceed on.";
@@ -175,7 +175,7 @@
     function finalCheck() {
       startAudio();
       const ans = document.getElementById("q4").value.trim().toLowerCase();
-      const allowed = ["refuge","vibez","knownledge","past","truth"];
+      const allowed = ["refuge","vibez","knownledge","past","truth", "tickles"];
 
       document.getElementById("step4").classList.add("hidden");
 
