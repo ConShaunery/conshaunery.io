@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Guest Book</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      box-sizing: border-box;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    button {
+      margin-top: 15px;
+      cursor: pointer;
+    }
+    .entry {
+      border-top: 1px solid #ccc;
+      padding: 10px 0;
+    }
+    .entry strong {
+      display: block;
+    }
+    .date {
+      font-size: 0.85em;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Guest Book</h1>
+
+  <form id="guestForm">
+    <label>
+      Name
+      <input type="text" id="name" required />
+    </label>
+
+    <label>
+      Message
+      <textarea id="message" required></textarea>
+    </label>
+
+    <button type="submit">Sign Guest Book</button>
+  </form>
+
+  <div id="entries"></div>
+
+  <script>
+    const form = document.getElementById('guestForm');
+    const entriesDiv = document.getElementById('entries');
+
+    function loadEntries() {
+      const entries = JSON.parse(localStorage.getItem('guestbook') || '[]');
+      entriesDiv.innerHTML = '';
+      entries.forEach(entry => {
+        const div = document.createElement('div');
+        div.className = 'entry';
+        div.innerHTML = `
+          <strong>${entry.name}</strong>
+          <div class="date">${entry.date}</div>
+          <div>${entry.message}</div>
+        `;
+        entriesDiv.appendChild(div);
+      });
+    }
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const message = document.getElementById('message').value.trim();
+      if (!name || !message) return;
+
+      const entries = JSON.parse(localStorage.getItem('guestbook') || '[]');
+      entries.unshift({
+        name,
+        message,
+        date: new Date().toLocaleString()
+      });
+
+      localStorage.setItem('guestbook', JSON.stringify(entries));
+      form.reset();
+      loadEntries();
+    });
+
+    loadEntries();
+  </script>
+
+</body>
+</html>
