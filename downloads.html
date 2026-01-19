@@ -2,63 +2,130 @@
 <html>
   <head>
     <title>conshaunery.com</title>
-<style>
-          body {
-    background-image: url("./gifs/purple_cube.gif");
-    background-size: 90%;
-    background-position: center;
-    background-color: rgb(91, 0, 128); /* fallback color */
-    color: white;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 16px;
-  }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 40px 20px;
-    }
-    h1, h2, h3 {
-      color: rgb(64, 255, 58);
-      font-weight: bold;
-      text-align: center;
-    }
-    p {
-      line-height: 1.5;
-      text-align: center;
-    }
-    a {
-      color: orange;
-      text-decoration: none;
-    }
-    a:hover {
-      color: white;
-    }
-    .gif {
-      cursor: pointer;
-    }
-  </style>
-  </head>
-  <body>
+    <style>
+      body {
+        background-image: url("./gifs/circuit_2.gif");
+        background-size: 30%;
+        background-position: center;
+        background-color: rgb(91, 0, 128);
+        color: rgb(255, 255, 255);
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        margin: 0;
+        padding: 0;
+      }
 
-<audio autoplay loop>
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+
+      h1, h2, h3 {
+        color: rgb(64, 255, 58);
+        font-weight: bold;
+        text-align: center;
+      }
+
+      p {
+        line-height: 1.5;
+        text-align: center;
+      }
+
+      a {
+        color: orange;
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: white;
+      }
+
+      .gif {
+        cursor: pointer;
+      }
+
+      .downloads-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 30px 20px;
+      }
+
+      .downloads {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+        width: 100%;
+        max-width: 900px;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.45);
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+      }
+
+      .download {
+        background: rgba(0, 0, 0, 0.6);
+        border: 2px solid rgb(232, 116, 0);
+        padding: 10px;
+        text-align: center;
+      }
+
+      .download img {
+        width: 100%;
+        image-rendering: pixelated;
+        margin-bottom: 10px;
+      }
+
+      .download h4 {
+        margin: 5px 0;
+        font-size: 14px;
+        color: rgb(64, 255, 58);
+      }
+
+      .download a {
+        display: inline-block;
+        margin-top: 6px;
+        padding: 4px 10px;
+        border: 1px solid orange;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <audio autoplay loop>
       <source src="./sounds/music/welcome.mp3" type="audio/mpeg">
-      Your browser does not support the audio element.
     </audio>
 
+    <div style="text-align: center;">
+  <img src="./gifs/Downloads_1.gif" alt="Download animation">
+</div>   
+    <div class="downloads-wrapper">
+      <div class="downloads">
 
-<img src ="./gifs/Downloads_1.gif">
-<h2>downloads are empty</h2>
-<h3>...not much here yet...</h3>
-<p>still kinda working on this page :)</p>
-  </body>
-  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-  <footer>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12 text-center">
-
+        <div class="download">
+          <img src="./previews/wallpaper1.gif" alt="Wallpaper">
+          <h4>Purple Cube Wallpaper</h4>
+          <a href="./downloads/purple_cube_wallpaper.zip" download>DOWNLOAD</a>
         </div>
+
+        <div class="download">
+          <img src="./previews/icons_preview.png" alt="Icons">
+          <h4>Pixel Icon Pack</h4>
+          <a href="./downloads/pixel_icons.zip" download>DOWNLOAD</a>
+        </div>
+
+        <div class="download">
+          <img src="./previews/music_preview.gif" alt="Music">
+          <h4>Site Music Pack</h4>
+          <a href="./downloads/music_pack.zip" download>DOWNLOAD</a>
+        </div>
+
       </div>
     </div>
-  </footer>
+
+    <h3>...more coming soon...</h3>
+  </body>
 </html>
